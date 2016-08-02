@@ -80,16 +80,58 @@
 
 
 
-<meta name="description" content="Coding changes everything...">
+<meta name="description" content="title: 【前端恶补系列】position
+date: 2016-04-27 23:44:41
+
+tags: 杂文
+
+
+**Table of Contents**
+
+- [-](#-)
+- [relative 相对定位](#relative-相对定位)
+- [static 静态定位](#static-静态定位)
+
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对p">
 <meta property="og:type" content="article">
-<meta property="og:title" content="test">
+<meta property="og:title" content="Stone's blog">
 <meta property="og:url" content="http://yoursite.com/2016/08/02/test/index.html">
 <meta property="og:site_name" content="Stone's blog">
-<meta property="og:description" content="Coding changes everything...">
-<meta property="og:updated_time" content="2016-08-01T22:17:06.000Z">
+<meta property="og:description" content="title: 【前端恶补系列】position
+date: 2016-04-27 23:44:41
+
+tags: 杂文
+
+
+**Table of Contents**
+
+- [-](#-)
+- [relative 相对定位](#relative-相对定位)
+- [static 静态定位](#static-静态定位)
+
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对p">
+<meta property="og:updated_time" content="2016-08-01T22:35:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="test">
-<meta name="twitter:description" content="Coding changes everything...">
+<meta name="twitter:title" content="Stone's blog">
+<meta name="twitter:description" content="title: 【前端恶补系列】position
+date: 2016-04-27 23:44:41
+
+tags: 杂文
+
+
+**Table of Contents**
+
+- [-](#-)
+- [relative 相对定位](#relative-相对定位)
+- [static 静态定位](#static-静态定位)
+
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对p">
 
 
 
@@ -107,7 +149,7 @@
   };
 </script>
 
-  <title> test | Stone's blog </title>
+  <title>  | Stone's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -227,7 +269,7 @@
             
             
               
-                test
+                
               
             
           </h1>
@@ -239,7 +281,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-02T00:00:00+08:00" content="2016-08-02">
+            <time itemprop="dateCreated" datetime="2016-08-02T06:35:49+08:00" content="2016-08-02">
               2016-08-02
             </time>
           </span>
@@ -267,7 +309,51 @@
       
 
       
-        
+        <hr>
+
+<p>title: 【前端恶补系列】position
+date: 2016-04-27 23:44:41</p>
+
+<h2>tags: 杂文</h2>
+
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
+
+- [-](#-)
+- [relative 相对定位](#relative-相对定位)
+- [static 静态定位](#static-静态定位)
+
+<!-- markdown-toc end -->
+
+<p>在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：</p>
+
+<p>常用的position属性及特点如下：</p>
+
+<pre><code>| 属性 | 特点 |
+| ------ | ----- |
+| absolute | 相对于于第一个非static属性的父元素进行定位，使用top，right等定位 |
+| relative | 相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位 |
+| fixed | 相对于浏览器窗口进行定位，使用top，right等定位 |
+| static | 默认使用的属性 |
+| inherit | 继承父元素的定位属性 |
+</code></pre>
+
+<h3>absolute 绝对定位</h3>
+
+<p>在absolute定位中，如果没有指定top，right等属性，它会自动选父元素进行定位，而不看父元素的定位属性。因此在不适用top等属性时，元素是没有脱离文档流的。</p>
+
+<p>决定定位的元素可以通过z-index属性设计相互层叠关系，值得注意的是absolute元素之间的margin之间是不会发生重叠的</p>
+
+<h3>relative 相对定位</h3>
+
+<p>在相对定位中，无论是否使用top等属性，该元素都不会脱离文档流。</p>
+
+<h3>static 静态定位</h3>
+
+<p>默认定位方式，位于文档流中，top，right等属性不起作用</p>
+
+<p>未完...</p>
+
       
     </div>
     
@@ -297,10 +383,6 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/02/test/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -368,7 +450,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -407,7 +489,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">tags: 杂文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">absolute 绝对定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">relative 相对定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">static 静态定位</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
