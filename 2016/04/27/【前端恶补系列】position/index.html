@@ -80,76 +80,49 @@
 
 
 
-<meta name="description" content="在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
+<meta name="description" content="Table of Contents
+
+-
+relative 相对定位
+static 静态定位
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
 常用的position属性及特点如下：
-
-
-
-属性
-特点
-
-
-
-
-absolute
-相对于于第一个非static属性的父元素进行定位，使用top，right等定位
-
-
-relative
-相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位
-
-
-fixed
-相">
+| 属性 | 特点 |
+| ------ | ----- |
+| absolute | 相对于于第一个非static属性的父元素进行定位，使用top，right">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【前端恶补系列】position">
 <meta property="og:url" content="http://yoursite.com/2016/04/27/【前端恶补系列】position/index.html">
 <meta property="og:site_name" content="Stone's blog">
-<meta property="og:description" content="在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
+<meta property="og:description" content="Table of Contents
+
+-
+relative 相对定位
+static 静态定位
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
 常用的position属性及特点如下：
-
-
-
-属性
-特点
-
-
-
-
-absolute
-相对于于第一个非static属性的父元素进行定位，使用top，right等定位
-
-
-relative
-相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位
-
-
-fixed
-相">
-<meta property="og:updated_time" content="2016-04-28T03:55:16.000Z">
+| 属性 | 特点 |
+| ------ | ----- |
+| absolute | 相对于于第一个非static属性的父元素进行定位，使用top，right">
+<meta property="og:updated_time" content="2016-08-01T22:37:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【前端恶补系列】position">
-<meta name="twitter:description" content="在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
+<meta name="twitter:description" content="Table of Contents
+
+-
+relative 相对定位
+static 静态定位
+
+
+在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：
 常用的position属性及特点如下：
-
-
-
-属性
-特点
-
-
-
-
-absolute
-相对于于第一个非static属性的父元素进行定位，使用top，right等定位
-
-
-relative
-相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位
-
-
-fixed
-相">
+| 属性 | 特点 |
+| ------ | ----- |
+| absolute | 相对于于第一个非static属性的父元素进行定位，使用top，right">
 
 
 
@@ -327,39 +300,24 @@ fixed
       
 
       
-        <p>在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：</p>
+        <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+<p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#-">-</a></li>
+<li><a href="#relative-相对定位">relative 相对定位</a></li>
+<li><a href="#static-静态定位">static 静态定位</a></li>
+</ul>
+<!-- markdown-toc end -->
+<p>在html的布局中我们经常都要使用的position这个属性，下面是对position的一些总结：</p>
 <p>常用的position属性及特点如下：</p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>absolute</td>
-<td>相对于于第一个非static属性的父元素进行定位，使用top，right等定位</td>
-</tr>
-<tr>
-<td>relative</td>
-<td>相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位</td>
-</tr>
-<tr>
-<td>fixed</td>
-<td>相对于浏览器窗口进行定位，使用top，right等定位</td>
-</tr>
-<tr>
-<td>static</td>
-<td>默认使用的属性</td>
-</tr>
-<tr>
-<td>inherit</td>
-<td>继承父元素的定位属性</td>
-</tr>
-</tbody>
-</table>
-<h3 id="absolute-绝对定位"><a href="#absolute-绝对定位" class="headerlink" title="absolute 绝对定位"></a>absolute 绝对定位</h3><p>在absolute定位中，如果没有指定top，right等属性，它会自动选父元素进行定位，而不看父元素的定位属性。因此在不适用top等属性时，元素是没有脱离文档流的。</p>
+<pre><code>| 属性 | 特点 |
+| ------ | ----- |
+| absolute | 相对于于第一个非static属性的父元素进行定位，使用top，right等定位 |
+| relative | 相对于父元素进行定位，但是只是视觉上，仍然占有位置，不脱离文档流，使用top，right等定位 |
+| fixed | 相对于浏览器窗口进行定位，使用top，right等定位 |
+| static | 默认使用的属性 |
+| inherit | 继承父元素的定位属性 |
+</code></pre><h3 id="absolute-绝对定位"><a href="#absolute-绝对定位" class="headerlink" title="absolute 绝对定位"></a>absolute 绝对定位</h3><p>在absolute定位中，如果没有指定top，right等属性，它会自动选父元素进行定位，而不看父元素的定位属性。因此在不适用top等属性时，元素是没有脱离文档流的。</p>
 <p>决定定位的元素可以通过z-index属性设计相互层叠关系，值得注意的是absolute元素之间的margin之间是不会发生重叠的</p>
 <h3 id="relative-相对定位"><a href="#relative-相对定位" class="headerlink" title="relative 相对定位"></a>relative 相对定位</h3><p>在相对定位中，无论是否使用top等属性，该元素都不会脱离文档流。</p>
 <h3 id="static-静态定位"><a href="#static-静态定位" class="headerlink" title="static 静态定位"></a>static 静态定位</h3><p>默认定位方式，位于文档流中，top，right等属性不起作用</p>
@@ -393,12 +351,16 @@ fixed
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/04/27/新的起点/" rel="next" title="新的起点">
+                <i class="fa fa-chevron-left"></i> 新的起点
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/04/27/新的起点/" rel="prev" title="新的起点">
-                新的起点 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/11/【docker】docker学习小记/" rel="prev" title="【docker】docker学习小记">
+                【docker】docker学习小记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -467,7 +429,7 @@ fixed
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -477,7 +439,7 @@ fixed
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
