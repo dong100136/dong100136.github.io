@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Talk is cheap,show me the code!"><title>Spark任务执行 | Stone@bupt</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Spark任务执行</h1><a id="logo" href="/.">Stone@bupt</a><p class="description">精通各种语言的helloword</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="https://dong100136.github.io/PracticeCode/"><i class="fa fa-code"> 小代码</i></a><a href="/resume"><i class="fa fa-sticky-note"> resume</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Spark任务执行</h1><div class="post-meta">Dec 21, 2016<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><p>这篇文章主要是总结一下Spark提交任务，执行的任务的流程。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><img src="http://oigsxz3vk.bkt.clouddn.com/16-12-21/17373377-file_1482291670325_5e23.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名词</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">client</td>
+<td style="text-align:center">负责用户任务提交</td>
+</tr>
+<tr>
+<td style="text-align:center">Driver</td>
+<td style="text-align:center">负责作业控制</td>
+</tr>
+<tr>
+<td style="text-align:center">Master</td>
+<td style="text-align:center">主控节点</td>
+</tr>
+<tr>
+<td style="text-align:center">Worker</td>
+<td style="text-align:center">执行节点</td>
+</tr>
+<tr>
+<td style="text-align:center">Executor</td>
+<td style="text-align:center">执行单元</td>
+</tr>
+<tr>
+<td style="text-align:center">BlockManager</td>
+<td style="text-align:center">RDD缓存管理器</td>
+</tr>
+</tbody>
+</table>
+<p>用户通过client提交任务到Driver后，Driver通过分析RDD的依赖关系，绘制响应的DAG图，然后创建一系列的TaskSet，分发给不同的Executor进行处理。具体执行在不同的部署模式下略有不同。</p>
+<p>这里需要注意，每一个Spark Application的运行环境都是独立的，不会互相影响。每一个Application的运行过程可以分为下面几个阶段:</p>
+<ol>
+<li>构建应用运行时的环境</li>
+<li>将程序转换为DAG</li>
+<li>执行DAG</li>
+<li>销毁运行环境</li>
+</ol>
+<h2 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h2><p>DAG(有向无环图)，主要是描述了任务执行的流程，由RDD通过依赖关系生成。下面是一个DAG图:</p>
+<p><img src="http://oigsxz3vk.bkt.clouddn.com/16-12-21/73117942-file_1482292465162_12490.png" alt=""></p>
+<p>一个DAG图由这几部分组成:rdd，partition，stage。</p>
+<p>所有的操作都是在partition上进行的，而不是rdd，partition是spark操作的最小单位。</p>
+<p>RDD的依赖关系分为窄依赖和宽依赖两种，宽依赖涉及数据混洗，需要等待所有父RDD准备就绪后才能进行，而窄依赖则不需要涉及数据混洗，可以采用流水线的方式进行处理(pipeline)。根据这种依赖关系，可以将不同的Task划分到不同的Stage中。</p>
+<p>在生成DAG的过程是对执行Action操作的RDD进行回溯，根据RDD中的依赖关系(即对父节点的依赖)进行计算。开始的时候整个DAG划分为一个Stage(finalStage)，然后从最后的一个RDD进行回溯，如果遇到窄依赖，则继续回溯，如果遇到宽依赖，则划分出一个新的Stage，然后继续回溯，直到完成。所以每一个Stage由一组Task组成。</p>
+<p>实际上DAG的生成可能还涉及剪枝的问题，会比较复杂。</p>
+<p><img src="http://oigsxz3vk.bkt.clouddn.com/16-12-21/82400777-file_1482300195330_de6e.jpg" alt=""></p>
+<p>上面是一个wordcount的DAG图，这里主要阐述一个细节问题。上面的DAG由两个Stage组成，中间有一个Shuffled操作，第一个Stage由三个Task组成，通过pipeline的方式执行。在三个Task都执行完成之后才会执行Shuffled操作，然后下一个Stage读取Shuffled的结果，继续进行计算。而中间Shuffled的结果是怎么交给MapPartitionsRDD的呢？ShuffledRDD执行的中间结果是保存在硬盘中的，下一个阶段的MapPartitionsRDD则通过读取硬盘进行读取。</p>
+<h2 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h2><p>不同的部署方式的执行过程略有不同，但是大体上的概念是一致。</p>
+<h3 id="1-Standalone模式"><a href="#1-Standalone模式" class="headerlink" title="1.Standalone模式"></a>1.Standalone模式</h3><p>在Standalone模式下，有两种deploy模式，主要区别在Driver运行在哪里，默认是client模式，即Driver运行在客户端上，另外一种是运行在Worker上。</p>
+<p>无论那一种模式，运行起来还是差不多的。</p>
+<p>在这里面有如下主要的进程:</p>
+<p><strong>Master</strong>:负责资源管理，命令Worker启动Executor和Driver</p>
+<p><strong>Worker</strong>:worker是工作节点的守护进程，负责向Master汇报心跳，启动Executor和Driver</p>
+<p><strong>Driver</strong>:一个作业(Application)的核心，负责DAG图的构建，Stage的划分，Task的管理和调度，生成SchedulerBackend等等任务。</p>
+<p><strong>Executor</strong>:真正执行任务的进程，每个Application一般会使用多个Worker，每个Worker上只会启动一个Executor进程，每个Executor受Driver控制，可以启动多个Task任务执行。</p>
+<p>执行作业的流程整理如下:</p>
+<ol>
+<li><p>client提交任务到Master节点</p>
+</li>
+<li><p>Master让一个Worker启动Driver，让其他的Worker启动Executor</p>
+</li>
+<li><p>负责启动Driver的Worker会启动DriverRunner线程，然后启动SchedulerBackend进程，SchedulerBackend中包含DAGScheduler，DAGScheduler根据作业构建DAG图和划分Stage，产生TaskSet，交给TaskScheduler进行处理。</p>
+</li>
+<li><p>其余负责启动Executor的Worker会启动ExecutorRunner线程，然后启动ExecutorBackend，并向SchedulerBackend进行注册，然后从TaskSchedule获取Task，并将执行情况汇报给SchedulerBackend</p>
+</li>
+<li><p>在执行的过程中，所有Worker都会向master发送心跳信息，然后master向Driver汇报各个worker的情况。</p>
+</li>
+</ol>
+<p>这里有几种故障情况的处理:</p>
+<p>(1) Worker故障。因为心跳信号的丢失，Master知道这个Worker出现故障了，然后就将这个节点进行移除，并将情况汇报给Driver。</p>
+<p>(2) Executor故障。此时ExecutorRunner会将故障情况汇报给Master，然后由Master给改worker发送重启启动Executor的指令。</p>
+<p>(3) Master故障。这个主要通过zookeeper提供的HA解决</p>
+<p>从上面大概可以看出，master主要负责资源的健康检查和管理，而Driver主要负责任务的执行和调度。</p>
+<h3 id="2-YARN模式"><a href="#2-YARN模式" class="headerlink" title="2.YARN模式"></a>2.YARN模式</h3><p><img src="http://oigsxz3vk.bkt.clouddn.com/16-12-21/53872472-file_1482305283463_7bb6.png" alt=""></p>
+<p>在YARN模式下执行的流程基本相似，上面的Spark Application Master相当与standalone中的SchedulerBackend,而Executor相当于standalone中的ExecutorBackend。</p>
+<h2 id="作业事件流"><a href="#作业事件流" class="headerlink" title="作业事件流"></a>作业事件流</h2><p>作业的过程可以概括如下:</p>
+<ol>
+<li><p>操作RDD对象，如果遇到Action操作，则执行runJob指令，将任务提交到DAGScheduler。</p>
+</li>
+<li><p>DAGScheduler进行回溯产生DAG图，然后通过submitTasks将任务提交到TaskScheduler。</p>
+</li>
+<li><p>TaskScheduler将TaskSet通过某种方式分发到Executor上执行，当这个Task执行够会给TaskScheduler发送完成的消息，当这个TaskSet执行完之后，则会将DAGScheduler发送完成消息。</p>
+</li>
+<li><p>Executor收到Task会执行LaunchTask操作，然后生成TaskRunner执行任务。</p>
+</li>
+</ol>
+<blockquote>
+<p>分发到Executor的Task有4个参数:targetRDD，partitions，func，listeners。</p>
+</blockquote>
+<h2 id="运行环境的准备"><a href="#运行环境的准备" class="headerlink" title="运行环境的准备"></a>运行环境的准备</h2><p>运行环境的准备可以分为两种方式，粗粒度和细粒度:</p>
+<p><strong>粗粒度</strong>就是在执行之前就将所有需要使用到的资源准备好，然后再执行任务。</p>
+<p><strong>细粒度</strong>就是在执行的过程中动态地申请资源。</p>
+<blockquote>
+<p>在Spark1.5版本中，YARN模式只支持粗粒度的构建方式。</p>
+</blockquote>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://dong100136.github.io/2016/12/21/spark-execute/" data-id="ciwynp0h800135lwhs0n8v1w7" class="article-share-link">分享到</a><div class="tags"><a href="/tags/spark/">spark</a></div><div class="post-nav"><a href="/2016/12/20/spark-model/" class="next">Spark编程模型</a></div></div></div></div><div class="pure-u-1 pure-u-md-1-4"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://dong100136.github.io"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/js/" style="font-size: 15px;">js</a> <a href="/tags/速查/" style="font-size: 15px;">速查</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/正则/" style="font-size: 15px;">正则</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/爬虫/" style="font-size: 15px;">爬虫</a> <a href="/tags/数据库/" style="font-size: 15px;">数据库</a> <a href="/tags/git/" style="font-size: 15px;">git</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/12/21/spark-execute/">Spark任务执行</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/spark-model/">Spark编程模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/20/spark-overview/">Spark基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/16/pic-upload/">前端实现图片的裁剪和上传</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/14/dp-visitor/">这都是套路-访问者模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/13/dp-strategy/">这都是套路-策略模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/05/dp-state/">这都是套路-状态模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/05/dp-mediator/">这都是套路-中介者模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/05/dp-command/">这都是套路-命令模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/04/dp-approver/">这都是套路-责任链模式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://github.com/dong100136" title="github主页" target="_blank">github主页</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Stone@bupt.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
