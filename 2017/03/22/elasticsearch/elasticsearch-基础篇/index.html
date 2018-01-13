@@ -12,6 +12,17 @@
 
 
 
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
 
 
 
@@ -118,12 +129,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="elasticsearch-基础篇">
 <meta property="og:url" content="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/index.html">
-<meta property="og:site_name" content="Stone 东少">
+<meta property="og:site_name" content="Stone">
 <meta property="og:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的L">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg">
-<meta property="og:updated_time" content="2017-11-05T05:20:34.826Z">
+<meta property="og:updated_time" content="2018-01-13T15:03:20.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch-基础篇">
 <meta name="twitter:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的L">
@@ -144,7 +155,7 @@
     since: '2/3/2017 11:30:00',
     onlineAPI: '',
     site: {
-      title: 'Stone 东少',
+      title: 'Stone',
       subtitle: '',
       author: 'Stone'
     },
@@ -188,7 +199,7 @@
 
 
 
-  <title>elasticsearch-基础篇 | Stone 东少</title>
+  <title>elasticsearch-基础篇 | Stone</title>
   
 
 
@@ -241,6 +252,26 @@
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
           </a>
         </li>
       
@@ -322,10 +353,10 @@
         <span class="logo-line-before"><i></i></span>
         <div class="site-title">
           <div id="animate" class="animate">
-            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
           </div>
           <div id="guide" class="guide">
-            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
           </div>
         </div>
         <span class="logo-line-after"><i></i></span>
@@ -373,6 +404,16 @@
 			<div class="post-day">22</div>
 	</div>
   
+  <div class="post-badge">
+    
+      <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/技术录/" itemprop="url" rel="index">
+          <span itemprop="name">技术录</span>
+        </a>
+      </span>
+    
+  </div>
+  
 
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/">
@@ -384,7 +425,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Stone 东少">
+      <meta itemprop="name" content="Stone">
     </span>
 
     
@@ -414,6 +455,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">•</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术录/" itemprop="url" rel="index">
+                    <span itemprop="name">技术录</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -597,12 +660,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <div class="disqus-loading">
-          <strong>Disqus 加载中...</strong>
-          <p>如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理</p>
-        </div>
-      </div>
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div>
     </div>
 
   
@@ -610,42 +668,6 @@
 
 
 
-
-  
-
-    
-      <script type="text/javascript">
-        if (disqus_config) {
-          var disqus_config = function () {
-            this.page.url = 'http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/';
-            this.page.identifier = '2017/03/22/elasticsearch/elasticsearch-基础篇/';
-            this.page.title = 'elasticsearch-基础篇';
-          };
-          if (window.DISQUS) {
-            $('.disqus-loading').remove();
-            window.DISQUS.reset({
-              reload: true,
-              config: function () {
-                this.page.url = 'http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/';
-                this.page.identifier = '2017/03/22/elasticsearch/elasticsearch-基础篇/';
-                this.page.title = 'elasticsearch-基础篇';
-              }
-            });
-          }
-        }
-        else {
-          var disqus_config = function () {
-            this.page.url = 'http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/';
-            this.page.identifier = '2017/03/22/elasticsearch/elasticsearch-基础篇/';
-            this.page.title = 'elasticsearch-基础篇';
-          };
-          var d = document, s = d.createElement('script');
-          s.src = 'https://diygod-me.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', '' + +new Date());
-          (d.head || d.body).appendChild(s);
-        }
-      </script>
-    
 
   
 
@@ -661,6 +683,21 @@
   
 
 
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
 
 
 
@@ -767,6 +804,15 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
             
 
           </nav>
@@ -822,7 +868,7 @@
         <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
 <p>做一名合格的绅士</p>
 
-<p>© <span itemprop="copyrightYear">2018</span> Stone 东少.
+<p>© <span itemprop="copyrightYear">2018</span> Stone.
     由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
     Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
     <a href="/sitemap.xml" target="_blank">站点地图</a>.

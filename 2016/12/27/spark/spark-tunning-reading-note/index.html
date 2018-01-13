@@ -12,6 +12,17 @@
 
 
 
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
 
 
 
@@ -118,7 +129,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过测试进行Spark调优">
 <meta property="og:url" content="http://dong100136.github.io/2016/12/27/spark/spark-tunning-reading-note/index.html">
-<meta property="og:site_name" content="Stone 东少">
+<meta property="og:site_name" content="Stone">
 <meta property="og:description" content="这是阅读《Spark Parameter Tunning via Trial-and-Error》的阅读笔记。 文中主要是通过分析12个参数对三个实验的效果，然后得到一个调优的测试顺序和方法，基本上不涉及Spark运行的原理，只通过比较两个不同的参数的效果选择一个较好的参数，然后继续比较下一组数据。 这个调优的方法条理比较清晰，值得学习！ 正文Spark能够调优的参数有大概150多个，按照其影响的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcxgfckgej30gc07mabn.jpg">
@@ -147,7 +158,7 @@
     since: '2/3/2017 11:30:00',
     onlineAPI: '',
     site: {
-      title: 'Stone 东少',
+      title: 'Stone',
       subtitle: '',
       author: 'Stone'
     },
@@ -191,7 +202,7 @@
 
 
 
-  <title>通过测试进行Spark调优 | Stone 东少</title>
+  <title>通过测试进行Spark调优 | Stone</title>
   
 
 
@@ -244,6 +255,26 @@
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
           </a>
         </li>
       
@@ -325,10 +356,10 @@
         <span class="logo-line-before"><i></i></span>
         <div class="site-title">
           <div id="animate" class="animate">
-            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
           </div>
           <div id="guide" class="guide">
-            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
           </div>
         </div>
         <span class="logo-line-after"><i></i></span>
@@ -387,7 +418,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Stone 东少">
+      <meta itemprop="name" content="Stone">
     </span>
 
     
@@ -642,12 +673,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <div class="disqus-loading">
-          <strong>Disqus 加载中...</strong>
-          <p>如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理</p>
-        </div>
-      </div>
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div>
     </div>
 
   
@@ -655,42 +681,6 @@
 
 
 
-
-  
-
-    
-      <script type="text/javascript">
-        if (disqus_config) {
-          var disqus_config = function () {
-            this.page.url = 'http://dong100136.github.io/2016/12/27/spark/spark-tunning-reading-note/';
-            this.page.identifier = '2016/12/27/spark/spark-tunning-reading-note/';
-            this.page.title = '通过测试进行Spark调优';
-          };
-          if (window.DISQUS) {
-            $('.disqus-loading').remove();
-            window.DISQUS.reset({
-              reload: true,
-              config: function () {
-                this.page.url = 'http://dong100136.github.io/2016/12/27/spark/spark-tunning-reading-note/';
-                this.page.identifier = '2016/12/27/spark/spark-tunning-reading-note/';
-                this.page.title = '通过测试进行Spark调优';
-              }
-            });
-          }
-        }
-        else {
-          var disqus_config = function () {
-            this.page.url = 'http://dong100136.github.io/2016/12/27/spark/spark-tunning-reading-note/';
-            this.page.identifier = '2016/12/27/spark/spark-tunning-reading-note/';
-            this.page.title = '通过测试进行Spark调优';
-          };
-          var d = document, s = d.createElement('script');
-          s.src = 'https://diygod-me.disqus.com/embed.js';
-          s.setAttribute('data-timestamp', '' + +new Date());
-          (d.head || d.body).appendChild(s);
-        }
-      </script>
-    
 
   
 
@@ -706,6 +696,21 @@
   
 
 
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
 
 
 
@@ -812,6 +817,15 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
             
 
           </nav>
@@ -867,7 +881,7 @@
         <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
 <p>做一名合格的绅士</p>
 
-<p>© <span itemprop="copyrightYear">2018</span> Stone 东少.
+<p>© <span itemprop="copyrightYear">2018</span> Stone.
     由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
     Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
     <a href="/sitemap.xml" target="_blank">站点地图</a>.
