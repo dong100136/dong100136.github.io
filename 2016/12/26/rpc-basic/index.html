@@ -1,4 +1,445 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="大数据小菜鸟一枚"><title>基于Socket的rpc简单实践 | Stone 东少</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">基于Socket的rpc简单实践</h1><a id="logo" href="/.">Stone 东少</a><p class="description">知足，常乐</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="https://dong100136.github.io/PracticeCode/"><i class="fa fa-code"> 小代码</i></a><a href="/resume"><i class="fa fa-sticky-note"> resume</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">基于Socket的rpc简单实践</h1><div class="post-meta">Dec 26, 2016<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><p>无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:</p>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,spark,rpc," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client">
+<meta name="keywords" content="java,spark,rpc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Socket的rpc简单实践">
+<meta property="og:url" content="http://dong100136.github.io/2016/12/26/rpc-basic/index.html">
+<meta property="og:site_name" content="Stone 东少">
+<meta property="og:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-05T05:20:34.850Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Socket的rpc简单实践">
+<meta name="twitter:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '0.0.4',
+    sidebar: {"position":"right","display":"always","offset":52,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    since: '2/3/2017 11:30:00',
+    onlineAPI: '',
+    site: {
+      title: 'Stone 东少',
+      subtitle: '',
+      author: 'Stone'
+    },
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    leancloud: {
+      enable: false,
+      appID: '',
+      appKey: ''
+    },
+    favicon: {
+      visibilitychange: true,
+      narmal: '/images/favicon.ico',
+      hidden: '/images/failure.ico',
+      show_text: '(/≧▽≦/)咦！又好了！',
+      hide_text: '(●—●)喔哟，崩溃啦！'
+    }
+  };
+</script>
+
+
+
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="canonical" href="http://dong100136.github.io/2016/12/26/rpc-basic/"/>
+
+
+
+
+
+  <title>基于Socket的rpc简单实践 | Stone 东少</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-48084758-7', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-练习场">
+          <a href="https://dong100136.github.io/PracticeCode/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-mars"></i> <br />
+            
+            练习场
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://dong100136.github.io/resume/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rocket"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+      <li class="menu-item search">
+          <form class="search-form">
+            <input name="keyword" type="text" class="search-input" placeholder="站内搜索">
+            <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
+          </form>
+      </li>
+      <li class="menu-item online"><span id="online-count">?</span>人在线</li>
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-brand-wrapper" style="background-image: url(/images/header-sagiri.jpg)">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <div class="brand">
+        <span class="logo-line-before"><i></i></span>
+        <div class="site-title">
+          <div id="animate" class="animate">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+          </div>
+          <div id="guide" class="guide">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+          </div>
+        </div>
+        <span class="logo-line-after"><i></i></span>
+      </div>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-date">
+			<div class="post-month">12月</div>
+			<div class="post-day">26</div>
+	</div>
+  
+
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2016/12/26/rpc-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/stone.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stone 东少">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于Socket的rpc简单实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-26T11:17:28+08:00">
+                2016-12-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:</p>
 <ol>
 <li><p>调用和被调用两者之间通信的建立</p>
 </li>
@@ -11,11 +452,11 @@
 <p>程序分为client和worker，client启动之后会启动一个线程专门进行监听8080端口，并管理连接进来的socket连接。worker启动之后会建立一个socket连接到client。</p>
 <p>client通过ServiceFactory获取到一个远程调理Service，通过调用Service的接口，然后将这个接口的相关信息，参数通过socket连接传送到worker上，通过反射调用该函数，并将调用的结果返回给client端，完成调用。</p>
 <p>关键程序如下:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//调用远程服务的代码</span></div><div class="line">  UserService userService = ServiceFactory.getUserService();</div><div class="line">  User user = userService.getUser();</div><div class="line">  System.out.println(user);</div></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//工厂类，返回服务的远程代理</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceFactory</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> UserService <span class="title">getUserService</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="comment">//实现一个空接口</span></div><div class="line">        UserService userService = <span class="keyword">new</span> UserService() &#123;</div><div class="line">            <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        ClassLoader serviceCL = UserService.class.getClassLoader();</div><div class="line">        Class&lt;?&gt;[] serviceInterface = userService.getClass().getInterfaces();</div><div class="line">        DynamicProxy proxy = <span class="keyword">new</span> DynamicProxy(UserService.class);</div><div class="line"></div><div class="line">        UserService userServiceProxy = (UserService) Proxy.newProxyInstance(serviceCL,serviceInterface,proxy);</div><div class="line">        <span class="keyword">return</span> userServiceProxy;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//动态代理，实现socket网络通信</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</div><div class="line">    Class obj = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicProxy</span><span class="params">(Class obj)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.obj = obj;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        ObjectInputStream objIS = <span class="keyword">null</span>;</div><div class="line">        ObjectOutputStream objOS = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        Socket worker = Client.getSocket();</div><div class="line"></div><div class="line">        objOS = <span class="keyword">new</span> ObjectOutputStream(worker.getOutputStream());</div><div class="line">        objOS.writeObject(obj.getName());</div><div class="line">        objOS.writeObject(method.getName());</div><div class="line">        objOS.writeObject(args);</div><div class="line"></div><div class="line">        objIS = <span class="keyword">new</span> ObjectInputStream(worker.getInputStream());</div><div class="line">        Object rs = objIS.readObject();</div><div class="line"></div><div class="line">        <span class="keyword">return</span> rs;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// worker端基于反射实现函数调用</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">handleRequest</span><span class="params">(String className,String methodName,Object[] args)</span></span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Class service = Class.forName(className + <span class="string">"Impl"</span>);</div><div class="line">            Constructor constructor = service.getDeclaredConstructor();</div><div class="line">            Object obj = constructor.newInstance();</div><div class="line"></div><div class="line">            Method method = service.getDeclaredMethod(methodName);</div><div class="line">            Object rs = method.invoke(obj, args);</div><div class="line"></div><div class="line">            <span class="keyword">return</span> rs;</div><div class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>代码比较简单，源码可以看<a href="https://github.com/dong100136/PracticeCode/tree/master/RPC-example" target="_blank" rel="external">这里</a>👈👈👈👈</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//调用远程服务的代码</span></span><br><span class="line">  UserService userService = ServiceFactory.getUserService();</span><br><span class="line">  User user = userService.getUser();</span><br><span class="line">  System.out.println(user);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//工厂类，返回服务的远程代理</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> UserService <span class="title">getUserService</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//实现一个空接口</span></span><br><span class="line">        UserService userService = <span class="keyword">new</span> UserService() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        ClassLoader serviceCL = UserService.class.getClassLoader();</span><br><span class="line">        Class&lt;?&gt;[] serviceInterface = userService.getClass().getInterfaces();</span><br><span class="line">        DynamicProxy proxy = <span class="keyword">new</span> DynamicProxy(UserService.class);</span><br><span class="line"></span><br><span class="line">        UserService userServiceProxy = (UserService) Proxy.newProxyInstance(serviceCL,serviceInterface,proxy);</span><br><span class="line">        <span class="keyword">return</span> userServiceProxy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//动态代理，实现socket网络通信</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    Class obj = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicProxy</span><span class="params">(Class obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.obj = obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        ObjectInputStream objIS = <span class="keyword">null</span>;</span><br><span class="line">        ObjectOutputStream objOS = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        Socket worker = Client.getSocket();</span><br><span class="line"></span><br><span class="line">        objOS = <span class="keyword">new</span> ObjectOutputStream(worker.getOutputStream());</span><br><span class="line">        objOS.writeObject(obj.getName());</span><br><span class="line">        objOS.writeObject(method.getName());</span><br><span class="line">        objOS.writeObject(args);</span><br><span class="line"></span><br><span class="line">        objIS = <span class="keyword">new</span> ObjectInputStream(worker.getInputStream());</span><br><span class="line">        Object rs = objIS.readObject();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> rs;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker端基于反射实现函数调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">handleRequest</span><span class="params">(String className,String methodName,Object[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class service = Class.forName(className + <span class="string">"Impl"</span>);</span><br><span class="line">            Constructor constructor = service.getDeclaredConstructor();</span><br><span class="line">            Object obj = constructor.newInstance();</span><br><span class="line"></span><br><span class="line">            Method method = service.getDeclaredMethod(methodName);</span><br><span class="line">            Object rs = method.invoke(obj, args);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> rs;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>代码比较简单，源码可以看<a href="https://github.com/dong100136/PracticeCode/tree/master/RPC-example" target="_blank" rel="noopener">这里</a>👈👈👈👈</p>
 <p>这里有两个小坑:</p>
 <ol>
 <li><p>对于socket，inputStream，outputStream只能获取一次，当获取两次之后就会出问题</p>
@@ -23,4 +464,689 @@
 <li><p>接口是不能进行动态代理的，接口不能实例化</p>
 </li>
 </ol>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://dong100136.github.io/2016/12/26/rpc-basic/" data-id="cjaghmrch000gg8z62v9lp6km" class="article-share-link">分享到</a><div class="tags"><a href="/tags/java/">java</a><a href="/tags/spark/">spark</a><a href="/tags/rpc/">rpc</a></div><div class="post-nav"><a href="/2016/12/21/spark/spark-execute/" class="pre">Spark任务执行</a><a href="/2016/12/27/spark/spark-tunning-reading-note/" class="next">通过测试进行Spark调优</a></div><div id="uyan_frame"><script src="http://v2.uyan.cc/code/uyan.js?uid=2131915"></script></div></div></div></div><div class="pure-u-1 pure-u-md-1-4"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://dong100136.github.io"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/正则/" style="font-size: 15px;">正则</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/聚类/" style="font-size: 15px;">聚类</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/信息检索/" style="font-size: 15px;">信息检索</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/js/" style="font-size: 15px;">js</a> <a href="/tags/速查/" style="font-size: 15px;">速查</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/rpc/" style="font-size: 15px;">rpc</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/数据库/" style="font-size: 15px;">数据库</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/爬虫/" style="font-size: 15px;">爬虫</a> <a href="/tags/elasticsearch/" style="font-size: 15px;">elasticsearch</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/hadoop/" style="font-size: 15px;">hadoop</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/kmeans和som的简单比较/">kmeans和som的简单比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/yiguan-md/">基于Spark的用户行为漏斗分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/">【读书笔记】MRv2框架分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/29/elasticsearch/elasticsearch-索引篇/">elasticsearch-索引篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/22/elasticsearch/elasticsearch-角色篇/">elasticsearch-角色篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/22/elasticsearch/elasticsearch-基础篇/">elasticsearch-基础篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/lucene介绍及打分公式说明/">lucene介绍及打分公式说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/akka-basic/">akka学习小记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/spark/spark-tunning-reading-note/">通过测试进行Spark调优</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/26/rpc-basic/">基于Socket的rpc简单实践</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://github.com/dong100136" title="github主页" target="_blank">github主页</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Stone 东少.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div class="post-share">分享到：</div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"/>
+        <p>微信扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"/>
+        <p>支付宝扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+            <a href="/tags/rpc/" rel="tag"># rpc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/21/spark/spark-execute/" rel="next" title="Spark任务执行">
+                <i class="fa fa-chevron-left"></i> Spark任务执行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/27/spark/spark-tunning-reading-note/" rel="prev" title="通过测试进行Spark调优">
+                通过测试进行Spark调优 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <div class="disqus-loading">
+          <strong>Disqus 加载中...</strong>
+          <p>如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理</p>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+
+
+
+  
+
+    
+      <script type="text/javascript">
+        if (disqus_config) {
+          var disqus_config = function () {
+            this.page.url = 'http://dong100136.github.io/2016/12/26/rpc-basic/';
+            this.page.identifier = '2016/12/26/rpc-basic/';
+            this.page.title = '基于Socket的rpc简单实践';
+          };
+          if (window.DISQUS) {
+            $('.disqus-loading').remove();
+            window.DISQUS.reset({
+              reload: true,
+              config: function () {
+                this.page.url = 'http://dong100136.github.io/2016/12/26/rpc-basic/';
+                this.page.identifier = '2016/12/26/rpc-basic/';
+                this.page.title = '基于Socket的rpc简单实践';
+              }
+            });
+          }
+        }
+        else {
+          var disqus_config = function () {
+            this.page.url = 'http://dong100136.github.io/2016/12/26/rpc-basic/';
+            this.page.identifier = '2016/12/26/rpc-basic/';
+            this.page.title = '基于Socket的rpc简单实践';
+          };
+          var d = document, s = d.createElement('script');
+          s.src = 'https://diygod-me.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', '' + +new Date());
+          (d.head || d.body).appendChild(s);
+        }
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/stone-big.jpeg"
+                alt="Stone" />
+            
+              <p class="site-author-name" itemprop="name">Stone</p>
+              <p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br/>所以当遇见了，就要去做</p>
+          </div>
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-graduation-cap"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-gitlab"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-weixin"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-more"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+            
+
+          </nav>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.png" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-image"></div>
+      <div class="footer-inner">
+        <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
+<p>做一名合格的绅士</p>
+
+<p>© <span itemprop="copyrightYear">2018</span> Stone 东少.
+    由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
+    Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
+    <a href="/sitemap.xml" target="_blank">站点地图</a>.
+    xxxx.
+</p>
+<p>Made with <i class="fa fa-heart throb" style="color: #d43f57;"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>. </p>
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=64990117";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+
+    
+
+  </div>
+
+  <script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

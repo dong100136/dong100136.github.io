@@ -1,29 +1,1180 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="大数据小菜鸟一枚"><title>前端实现图片的裁剪和上传 | Stone 东少</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">前端实现图片的裁剪和上传</h1><a id="logo" href="/.">Stone 东少</a><p class="description">知足，常乐</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="https://dong100136.github.io/PracticeCode/"><i class="fa fa-code"> 小代码</i></a><a href="/resume"><i class="fa fa-sticky-note"> resume</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">前端实现图片的裁剪和上传</h1><div class="post-meta">Dec 16, 2016<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><p>图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。</p>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端,js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(B">
+<meta name="keywords" content="前端,js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端实现图片的裁剪和上传">
+<meta property="og:url" content="http://dong100136.github.io/2016/12/16/pic-upload/index.html">
+<meta property="og:site_name" content="Stone 东少">
+<meta property="og:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(B">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i1.piimg.com/567571/e3d8be700339d16d.png">
+<meta property="og:updated_time" content="2017-11-05T05:20:34.841Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端实现图片的裁剪和上传">
+<meta name="twitter:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(B">
+<meta name="twitter:image" content="http://i1.piimg.com/567571/e3d8be700339d16d.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '0.0.4',
+    sidebar: {"position":"right","display":"always","offset":52,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    since: '2/3/2017 11:30:00',
+    onlineAPI: '',
+    site: {
+      title: 'Stone 东少',
+      subtitle: '',
+      author: 'Stone'
+    },
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    leancloud: {
+      enable: false,
+      appID: '',
+      appKey: ''
+    },
+    favicon: {
+      visibilitychange: true,
+      narmal: '/images/favicon.ico',
+      hidden: '/images/failure.ico',
+      show_text: '(/≧▽≦/)咦！又好了！',
+      hide_text: '(●—●)喔哟，崩溃啦！'
+    }
+  };
+</script>
+
+
+
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="canonical" href="http://dong100136.github.io/2016/12/16/pic-upload/"/>
+
+
+
+
+
+  <title>前端实现图片的裁剪和上传 | Stone 东少</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-48084758-7', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-练习场">
+          <a href="https://dong100136.github.io/PracticeCode/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-mars"></i> <br />
+            
+            练习场
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://dong100136.github.io/resume/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rocket"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+      <li class="menu-item search">
+          <form class="search-form">
+            <input name="keyword" type="text" class="search-input" placeholder="站内搜索">
+            <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
+          </form>
+      </li>
+      <li class="menu-item online"><span id="online-count">?</span>人在线</li>
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-brand-wrapper" style="background-image: url(/images/header-sagiri.jpg)">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <div class="brand">
+        <span class="logo-line-before"><i></i></span>
+        <div class="site-title">
+          <div id="animate" class="animate">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+          </div>
+          <div id="guide" class="guide">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span><span> </span><span>东</span><span>少</span>
+          </div>
+        </div>
+        <span class="logo-line-after"><i></i></span>
+      </div>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-date">
+			<div class="post-month">12月</div>
+			<div class="post-day">16</div>
+	</div>
+  
+
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2016/12/16/pic-upload/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/stone.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stone 东少">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端实现图片的裁剪和上传</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-16T16:11:29+08:00">
+                2016-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。</p>
 <p>主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇</p>
 <h3 id="Blob，DataURL-Base64"><a href="#Blob，DataURL-Base64" class="headerlink" title="Blob，DataURL,Base64"></a>Blob，DataURL,Base64</h3><p>在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理:</p>
 <h4 id="Blob"><a href="#Blob" class="headerlink" title="Blob"></a>Blob</h4><p>Blob(Binary Large Object) 大型二进制对象，很多人在学习数据库的时候可能都已经接触过Blob进行，但是这里HTML5中的Blob对象和mysql中的还是好区别的，数据库中Blob只是一个二进制容器，而HTML5中的Blob带有一些文件名，文件类型相关的信息。</p>
 <p>在表单中传送文件，发送的就是Blob对象。</p>
 <p>下面是一个小实验，创建一个Blob对象，然后将它发送出去:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var html = &quot;&lt;h1&gt;hello world&lt;/h1&gt;&quot;;</div><div class="line">var htmlBlob = new Blob([html],&#123;type:&quot;text/plain&quot;&#125;);</div><div class="line"></div><div class="line">// 创建表单</div><div class="line">var formData = new FormData();</div><div class="line">formData.append(&quot;name&quot;,&quot;test&quot;);</div><div class="line">formData.append(&quot;file&quot;,htmlBlob);</div><div class="line"></div><div class="line">// 创建ajax</div><div class="line">var request = new XMLHttpRequest();</div><div class="line">request.open(&quot;POST&quot;,&quot;http://localhost/test&quot;);</div><div class="line">request.send(formData);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var html = &quot;&lt;h1&gt;hello world&lt;/h1&gt;&quot;;</span><br><span class="line">var htmlBlob = new Blob([html],&#123;type:&quot;text/plain&quot;&#125;);</span><br><span class="line"></span><br><span class="line">// 创建表单</span><br><span class="line">var formData = new FormData();</span><br><span class="line">formData.append(&quot;name&quot;,&quot;test&quot;);</span><br><span class="line">formData.append(&quot;file&quot;,htmlBlob);</span><br><span class="line"></span><br><span class="line">// 创建ajax</span><br><span class="line">var request = new XMLHttpRequest();</span><br><span class="line">request.open(&quot;POST&quot;,&quot;http://localhost/test&quot;);</span><br><span class="line">request.send(formData);</span><br></pre></td></tr></table></figure>
 <p><img src="http://i1.piimg.com/567571/e3d8be700339d16d.png" alt=""></p>
 <p>从图中可以看到表单的Content-Type多了一个边界的标识符，通过这个方法，就可以在表单中传输多个文件，那就有另外一个问题了，如果文件过大怎么办？Blob支持分割操作，每一个Blob对象都可以记录自己的偏移位置，在服务器中可以重新进行组装。</p>
 <h4 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h4><p>Base64是一种编码方式，可以将任意字节组转换为文本，这样就可以通过文本的方式进行传输，例如放在url中。这样生成的文本文件可以放在协议中而不用拍里面出现一些特殊的字符破坏协议的解析。Base64处理的时候将文件转换为二进制进行表示，然后以6位为一组将其映射到64个字符之一。</p>
 <p>Base64在实际应用中有一些变形，因为像url中，会将+，-换成其他的字符进行表示。</p>
 <h4 id="DataURL"><a href="#DataURL" class="headerlink" title="DataURL"></a>DataURL</h4><p>DataURL是url的其中一种类型，可以将二进制数据放进url中，实质上还是利用了Base64进行编码，只不过在其头部加了对数据类型的描述。通过这样的机制，我们可以将一些小的图片直接放在html中，那么浏览器就不用打开一个新的连接进行下载。当然，这个技术还有很多的用途。例如传送一些小图片，因为经过了编码，不易发觉其内容。</p>
 <p>下面是网上找的一小段dataurl，大家可以将它放到url中进行测试。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">data:image/gif;base64,R0lGODlhMwAxAIAAAAAAAP///</div><div class="line">yH5BAAAAAAALAAAAAAzADEAAAK8jI+pBr0PowytzotTtbm/DTqQ6C3hGX</div><div class="line">ElcraA9jIr66ozVpM3nseUvYP1UEHF0FUUHkNJxhLZfEJNvol06tzwrgd</div><div class="line">LbXsFZYmSMPnHLB+zNJFbq15+SOf50+6rG7lKOjwV1ibGdhHYRVYVJ9Wn</div><div class="line">k2HWtLdIWMSH9lfyODZoZTb4xdnpxQSEF9oyOWIqp6gaI9pI1Qo7BijbF</div><div class="line">ZkoaAtEeiiLeKn72xM7vMZofJy8zJys2UxsCT3kO229LH1tXAAAOw==</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data:image/gif;base64,R0lGODlhMwAxAIAAAAAAAP///</span><br><span class="line">yH5BAAAAAAALAAAAAAzADEAAAK8jI+pBr0PowytzotTtbm/DTqQ6C3hGX</span><br><span class="line">ElcraA9jIr66ozVpM3nseUvYP1UEHF0FUUHkNJxhLZfEJNvol06tzwrgd</span><br><span class="line">LbXsFZYmSMPnHLB+zNJFbq15+SOf50+6rG7lKOjwV1ibGdhHYRVYVJ9Wn</span><br><span class="line">k2HWtLdIWMSH9lfyODZoZTb4xdnpxQSEF9oyOWIqp6gaI9pI1Qo7BijbF</span><br><span class="line">ZkoaAtEeiiLeKn72xM7vMZofJy8zJys2UxsCT3kO229LH1tXAAAOw==</span><br></pre></td></tr></table></figure>
 <h3 id="浏览器中的文件读取"><a href="#浏览器中的文件读取" class="headerlink" title="浏览器中的文件读取"></a>浏览器中的文件读取</h3><p>由于安全的原因，所有浏览不能直接访问本地的文件系统，必须通过浏览器开放的api访问一个虚拟的文件系统。</p>
 <p>在HTML5中提供了FileReader接口由于读取本地文件。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!doctype html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"input-file"</span> <span class="attr">onchange</span>=<span class="string">"showInput()"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"pic"</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">src</span>=<span class="string">""</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">showInput</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> file = <span class="built_in">document</span>.getElementById(<span class="string">"input-file"</span>).files[<span class="number">0</span>];</div><div class="line"></div><div class="line">        <span class="keyword">var</span> fileReader = <span class="keyword">new</span> FileReader();</div><div class="line"></div><div class="line">        fileReader.readAsDataURL(file);</div><div class="line">        fileReader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"pic"</span>);</div><div class="line">            img.setAttribute(<span class="string">'src'</span>, <span class="keyword">this</span>.result);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"input-file"</span> <span class="attr">onchange</span>=<span class="string">"showInput()"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"pic"</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">src</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">showInput</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> file = <span class="built_in">document</span>.getElementById(<span class="string">"input-file"</span>).files[<span class="number">0</span>];</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> fileReader = <span class="keyword">new</span> FileReader();</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">        fileReader.readAsDataURL(file);</span></span><br><span class="line"><span class="javascript">        fileReader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"pic"</span>);</span></span><br><span class="line"><span class="javascript">            img.setAttribute(<span class="string">'src'</span>, <span class="keyword">this</span>.result);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>上面是一下端示范代码，读取本地的一个图片然后显示出来，理解了dataur之后就很好理解这段代码了。<br>FileReader采用异步读取的方式，所以需要注册一个onload函数，表示在读取图片之后进行的操作。<br>FileReader还提供了很多不同的事件可以进行绑定。</p>
 <h3 id="图片的裁剪和上传"><a href="#图片的裁剪和上传" class="headerlink" title="图片的裁剪和上传"></a>图片的裁剪和上传</h3><p>下面就是这篇文章的重点了，现在我们理一下这个思路，我们需要先将图片读取显示出来，用户进行裁剪，然后就裁剪后的结果转为二进制流使用post进行上传。</p>
 <p>图片的读取显示比较简单，利用FileReader很容易实现，问题是怎么获取用户裁剪后的数据，并转换为二进制流。我使用的是一个叫cropper的插件(其他基本大同小异)，其中有一个方法叫做getCroppedCanvas，可以获取到一个Canvas对象。然后调用canvas对象的toDataURL将其转换为DataURL的png文件(可以指定其他的文件格式)，有了这个DataURL后就是想办法将其转换为Blob对象，方法也很简单，就是对base64编码进行解码，然后转换回而进行编码。就可以得到一个图片文件了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataURLtoBlob</span>(<span class="params">dataurl</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> arr = dataurl.split(<span class="string">','</span>), mime = arr[<span class="number">0</span>].match(<span class="regexp">/:(.*?);/</span>)[<span class="number">1</span>],</div><div class="line">            bstr = atob(arr[<span class="number">1</span>]), n = bstr.length, u8arr = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(n);</div><div class="line">    <span class="keyword">while</span> (n--) &#123;</div><div class="line">        u8arr[n] = bstr.charCodeAt(n);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Blob([u8arr], &#123;<span class="attr">type</span>: mime&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataURLtoBlob</span>(<span class="params">dataurl</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arr = dataurl.split(<span class="string">','</span>), mime = arr[<span class="number">0</span>].match(<span class="regexp">/:(.*?);/</span>)[<span class="number">1</span>],</span><br><span class="line">            bstr = atob(arr[<span class="number">1</span>]), n = bstr.length, u8arr = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(n);</span><br><span class="line">    <span class="keyword">while</span> (n--) &#123;</span><br><span class="line">        u8arr[n] = bstr.charCodeAt(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Blob([u8arr], &#123;<span class="attr">type</span>: mime&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后就是怎么将这个文件发送给服务器了。采用的HTML5提供的FormData对象，利用它可以创建表单，然后将其发送出去。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var formData = new FormData();</div><div class="line">formData.append(&apos;file&apos;,file);   //file为Blob对象</div><div class="line">......</div><div class="line"></div><div class="line">$.ajax(&#123;</div><div class="line">    url: &quot;/test/&quot;,</div><div class="line">    type: &quot;POST&quot;,</div><div class="line">    data: formData,</div><div class="line">    processData: false,</div><div class="line">    contentType: false</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var formData = new FormData();</span><br><span class="line">formData.append(&apos;file&apos;,file);   //file为Blob对象</span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">$.ajax(&#123;</span><br><span class="line">    url: &quot;/test/&quot;,</span><br><span class="line">    type: &quot;POST&quot;,</span><br><span class="line">    data: formData,</span><br><span class="line">    processData: false,</span><br><span class="line">    contentType: false</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>  请求中需要带将processData和contentType这个两个选项设置为false，这样发送出去的post请求的格式就是<code>multipart/formData</code>类型了。</p>
 <p>  如果使用thinkphp的话可以在post或者$_File对象中找到这个文件对象。</p>
-<h3 id="小坑"><a href="#小坑" class="headerlink" title="小坑"></a>小坑</h3><h4 id="input-type-file-的装饰"><a href="#input-type-file-的装饰" class="headerlink" title="input[type=file]的装饰"></a>input[type=file]的装饰</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> <span class="attr">for</span>=<span class="string">"open-file"</span>&gt;</span>上传图片</div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"banner"</span> <span class="attr">accept</span>=<span class="string">"image/*"</span> <span class="attr">id</span>=<span class="string">"open-file"</span> <span class="attr">style</span>=<span class="string">"position:absolute;clip:rect(0,0,0,0)"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">label</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="小坑"><a href="#小坑" class="headerlink" title="小坑"></a>小坑</h3><h4 id="input-type-file-的装饰"><a href="#input-type-file-的装饰" class="headerlink" title="input[type=file]的装饰"></a>input[type=file]的装饰</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> <span class="attr">for</span>=<span class="string">"open-file"</span>&gt;</span>上传图片</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"banner"</span> <span class="attr">accept</span>=<span class="string">"image/*"</span> <span class="attr">id</span>=<span class="string">"open-file"</span> <span class="attr">style</span>=<span class="string">"position:absolute;clip:rect(0,0,0,0)"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>html中的for标签是将某一个标签和表单的元素进行绑定，这种绑定分为显示绑定和隐式绑定，像上面的例子中,点击label标签就可以出发input的click事件。</p>
 <h4 id="thinkphp中的-File对象"><a href="#thinkphp中的-File对象" class="headerlink" title="thinkphp中的$_File对象"></a>thinkphp中的$_File对象</h4><p>上面的例子中，因为我们的DataURL产生的Blob文件是不带文件名的，而thinkphp判断文件类型，即ext的时候就是根据文件类型进行判断，所以如果不加处理的话，这个Blob文件是不能进行正常的上传的。这或许算是一个小bug吧。解决方法就是强制在介绍到的$_File强制添加一个文件名，让它可以判断出一个正确的文件类型。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://dong100136.github.io/2016/12/16/pic-upload/" data-id="cjaghmrcb000ag8z6mycb41i8" class="article-share-link">分享到</a><div class="tags"><a href="/tags/前端/">前端</a><a href="/tags/js/">js</a></div><div class="post-nav"><a href="/2016/11/30/quick-check/quick-check-python/" class="pre">语言速查-python</a><a href="/2016/12/20/spark/spark-overview/" class="next">Spark基础</a></div><div id="uyan_frame"><script src="http://v2.uyan.cc/code/uyan.js?uid=2131915"></script></div></div></div></div><div class="pure-u-1 pure-u-md-1-4"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://dong100136.github.io"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/正则/" style="font-size: 15px;">正则</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/聚类/" style="font-size: 15px;">聚类</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/信息检索/" style="font-size: 15px;">信息检索</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/js/" style="font-size: 15px;">js</a> <a href="/tags/速查/" style="font-size: 15px;">速查</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/rpc/" style="font-size: 15px;">rpc</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/数据库/" style="font-size: 15px;">数据库</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/爬虫/" style="font-size: 15px;">爬虫</a> <a href="/tags/elasticsearch/" style="font-size: 15px;">elasticsearch</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/hadoop/" style="font-size: 15px;">hadoop</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/kmeans和som的简单比较/">kmeans和som的简单比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/yiguan-md/">基于Spark的用户行为漏斗分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/">【读书笔记】MRv2框架分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/29/elasticsearch/elasticsearch-索引篇/">elasticsearch-索引篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/22/elasticsearch/elasticsearch-角色篇/">elasticsearch-角色篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/22/elasticsearch/elasticsearch-基础篇/">elasticsearch-基础篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/lucene介绍及打分公式说明/">lucene介绍及打分公式说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/akka-basic/">akka学习小记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/spark/spark-tunning-reading-note/">通过测试进行Spark调优</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/26/rpc-basic/">基于Socket的rpc简单实践</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://github.com/dong100136" title="github主页" target="_blank">github主页</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Stone 东少.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div class="post-share">分享到：</div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"/>
+        <p>微信扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"/>
+        <p>支付宝扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/30/quick-check/quick-check-python/" rel="next" title="语言速查-python">
+                <i class="fa fa-chevron-left"></i> 语言速查-python
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/20/spark/spark-overview/" rel="prev" title="Spark基础">
+                Spark基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <div class="disqus-loading">
+          <strong>Disqus 加载中...</strong>
+          <p>如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理</p>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+
+
+
+  
+
+    
+      <script type="text/javascript">
+        if (disqus_config) {
+          var disqus_config = function () {
+            this.page.url = 'http://dong100136.github.io/2016/12/16/pic-upload/';
+            this.page.identifier = '2016/12/16/pic-upload/';
+            this.page.title = '前端实现图片的裁剪和上传';
+          };
+          if (window.DISQUS) {
+            $('.disqus-loading').remove();
+            window.DISQUS.reset({
+              reload: true,
+              config: function () {
+                this.page.url = 'http://dong100136.github.io/2016/12/16/pic-upload/';
+                this.page.identifier = '2016/12/16/pic-upload/';
+                this.page.title = '前端实现图片的裁剪和上传';
+              }
+            });
+          }
+        }
+        else {
+          var disqus_config = function () {
+            this.page.url = 'http://dong100136.github.io/2016/12/16/pic-upload/';
+            this.page.identifier = '2016/12/16/pic-upload/';
+            this.page.title = '前端实现图片的裁剪和上传';
+          };
+          var d = document, s = d.createElement('script');
+          s.src = 'https://diygod-me.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', '' + +new Date());
+          (d.head || d.body).appendChild(s);
+        }
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/stone-big.jpeg"
+                alt="Stone" />
+            
+              <p class="site-author-name" itemprop="name">Stone</p>
+              <p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br/>所以当遇见了，就要去做</p>
+          </div>
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-graduation-cap"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-gitlab"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-weixin"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-more"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+            
+
+          </nav>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.png" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Blob，DataURL-Base64"><span class="nav-number">1.</span> <span class="nav-text">Blob，DataURL,Base64</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Blob"><span class="nav-number">1.1.</span> <span class="nav-text">Blob</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Base64"><span class="nav-number">1.2.</span> <span class="nav-text">Base64</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DataURL"><span class="nav-number">1.3.</span> <span class="nav-text">DataURL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器中的文件读取"><span class="nav-number">2.</span> <span class="nav-text">浏览器中的文件读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片的裁剪和上传"><span class="nav-number">3.</span> <span class="nav-text">图片的裁剪和上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小坑"><span class="nav-number">4.</span> <span class="nav-text">小坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#input-type-file-的装饰"><span class="nav-number">4.1.</span> <span class="nav-text">input[type=file]的装饰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#thinkphp中的-File对象"><span class="nav-number">4.2.</span> <span class="nav-text">thinkphp中的$_File对象</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-image"></div>
+      <div class="footer-inner">
+        <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
+<p>做一名合格的绅士</p>
+
+<p>© <span itemprop="copyrightYear">2018</span> Stone 东少.
+    由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
+    Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
+    <a href="/sitemap.xml" target="_blank">站点地图</a>.
+    xxxx.
+</p>
+<p>Made with <i class="fa fa-heart throb" style="color: #d43f57;"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>. </p>
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=64990117";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+
+    
+
+  </div>
+
+  <script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
