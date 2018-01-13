@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到J">
+<meta name="description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java反射机制学习">
 <meta property="og:url" content="http://dong100136.github.io/2016/11/22/java-scala-reflect/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到J">
+<meta property="og:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-05T05:20:34.837Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java反射机制学习">
-<meta name="twitter:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到J">
+<meta name="twitter:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
 
 
 
@@ -475,7 +475,7 @@
       
 
       
-        <p>泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 </p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 </p>
 <h1 id="java虚拟机的类加载机制"><a href="#java虚拟机的类加载机制" class="headerlink" title="java虚拟机的类加载机制"></a>java虚拟机的类加载机制</h1><p>在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。<br>其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。<br>当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到JVM中，紧接着提取其中类型信息，加载到方法区中。<br>其中的类型信息包括类的全限定名，字段信息，方法信息等等。<br>而这些被加载的类型信息可以通过java的一个基础类Class来进行访问。</p>
 <h1 id="java的反射机制"><a href="#java的反射机制" class="headerlink" title="java的反射机制"></a>java的反射机制</h1><p>实现反射机制，主要依赖四种类:Class，Constructor，Method，Field，分别对应一个类的构造器，方法和属性，通过访问这些类，我们可以了解类里面的情况。</p>
 <p>下面是一个简单的示范:</p>
@@ -780,7 +780,9 @@
 
       
 
+
     </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=701026&auto=1&height=66"></iframe>
   </aside>
 
 

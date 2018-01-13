@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序。">
+<meta name="description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序">
 <meta name="keywords" content="正则">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用正则匹配url中的任意参数">
 <meta property="og:url" content="http://dong100136.github.io/2016/11/29/regex-in-get/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序。">
+<meta property="og:description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-05T05:20:34.849Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用正则匹配url中的任意参数">
-<meta name="twitter:description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序。">
+<meta name="twitter:description" content="众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？ 在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的正则就不能带有顺序">
 
 
 
@@ -475,7 +475,7 @@
       
 
       
-        <p>众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>众所周知，get请求中的参数是没有固定的顺序的，那如何使用正则去匹配带有指定参数的http请求呢？</p>
 <p>在做大数据分析时，第一步是进行数据采集，其中有一个比较常见的做法是对http进行正则识别，将其映射为相应的操作，但是这里由一个很大的坑，<br>http请求中参数的顺序是不定的，例如乐视视频的相关操作的http中带有一个vid参数，但是这个vid参数在url中的位置是不定的，所以我们写的<br>正则就不能带有顺序。下面介绍一个小方法:</p>
 <blockquote>
 <p><a href="http://apple.www.letv.com/va/?act=ac&amp;atype=13&amp;ia=0&amp;err=0&amp;lc=70d6e0f0490f3b50410ac6cdda789b63&amp;ver=2.0&amp;aps=aps_h5_2.1.24&amp;ch=letv&amp;cid=2&amp;ct=0&amp;dur=0&amp;dur_total=0&amp;pid=10015173&amp;r=601741878760&amp;cur_url=http%253A%252F%252Fwww.le.com%252Fptv%252Fvplay%252F24185783.html&amp;ry=1&amp;ref=http%253A%252F%252Fwww.le.com%252F&amp;sys=1&amp;py=0%26ark%3D134&amp;uuid=1259177644495991&amp;pv=3.7.0&amp;vid=24185783&amp;vlen=1222&amp;p1=0&amp;p2=06&amp;ty=0&amp;ctime=1479259178061&amp;ut=85" target="_blank" rel="noopener">http://apple.www.letv.com/va/?act=ac&amp;atype=13&amp;ia=0&amp;err=0&amp;lc=70d6e0f0490f3b50410ac6cdda789b63&amp;ver=2.0&amp;aps=aps_h5_2.1.24&amp;ch=letv&amp;cid=2&amp;ct=0&amp;dur=0&amp;dur_total=0&amp;pid=10015173&amp;r=601741878760&amp;cur_url=http%253A%252F%252Fwww.le.com%252Fptv%252Fvplay%252F24185783.html&amp;ry=1&amp;ref=http%253A%252F%252Fwww.le.com%252F&amp;sys=1&amp;py=0%26ark%3D134&amp;uuid=1259177644495991&amp;pv=3.7.0&amp;vid=24185783&amp;vlen=1222&amp;p1=0&amp;p2=06&amp;ty=0&amp;ctime=1479259178061&amp;ut=85</a></p>
@@ -557,7 +557,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/30/quick-check/quick-check-js/" rel="prev" title="语言速查-javascript">
+              <a href="/2016/11/30/quick-check-js/" rel="prev" title="语言速查-javascript">
                 语言速查-javascript <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -756,7 +756,9 @@
 
       
 
+
     </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=701026&auto=1&height=66"></iframe>
   </aside>
 
 

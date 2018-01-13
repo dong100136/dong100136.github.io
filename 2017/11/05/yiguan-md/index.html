@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭">
+<meta name="description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
 <meta name="keywords" content="spark,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Spark的用户行为漏斗分析">
 <meta property="og:url" content="http://dong100136.github.io/2017/11/05/yiguan-md/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭">
+<meta property="og:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-05T07:55:53.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Spark的用户行为漏斗分析">
-<meta name="twitter:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭">
+<meta name="twitter:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
 
 
 
@@ -475,7 +475,7 @@
       
 
       
-        <p>之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。</p>
 <p>比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。<br>比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，<br>就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭</p>
 <p>用户行为指用户在网站中的一系列的操作，通过分析用户行为的转换率，可以找出产品中的一些不合理的地方，针对性地<br>进行分析。例如用户A在一购物网站中的行为是: 浏览网页，点击商品，加入购物车，点击支付，完成支付。通过分析这个过程中，<br>那一步流失的用户最多，进而分析每一步流式的原因，对产品进行优化。</p>
 <p>比赛的要求比较简单，给定用户的操作记录数据，从中查询指定时间范围内，指定时间窗口的每一步的用户转化率。<br>其实这波比赛还是比较水的，数据直接储存在hdfs上面，用spark进行读取。</p>
@@ -757,7 +757,9 @@
 
       
 
+
     </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=701026&auto=1&height=66"></iframe>
   </aside>
 
 

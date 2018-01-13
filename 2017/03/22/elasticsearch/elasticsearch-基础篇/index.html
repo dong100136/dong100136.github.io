@@ -124,20 +124,20 @@
 
 
 
-<meta name="description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的L">
+<meta name="description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
 <meta name="keywords" content="大数据,elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="elasticsearch-基础篇">
 <meta property="og:url" content="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的L">
+<meta property="og:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg">
 <meta property="og:updated_time" content="2018-01-13T15:03:20.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch-基础篇">
-<meta name="twitter:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的L">
+<meta name="twitter:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
 <meta name="twitter:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg">
 
 
@@ -510,7 +510,7 @@
       
 
       
-        <p>做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。<br>在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。<br>在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。</p>
 <h2 id="elasticsearch介绍"><a href="#elasticsearch介绍" class="headerlink" title="elasticsearch介绍"></a>elasticsearch介绍</h2><p>elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的Lucene搜索引擎。与其说是一个搜索引擎，更贴切的说法应该是一个非关系型数据库，<br>可以使用elasticsearch 储存和处理PB级别的结构化，非结构化数据。</p>
 <p>elaticseasrch 集群有一个很大的特点就是每一个节点的地位都是平等的，都可以独立成为一个系统,是一种无中心的集群模式，这样的组群方式让它的部署，横向扩展非常灵活，只要起来一台es节点，通过自动发现机制，就可以自动加入已有的集群中。<br>因为其底层是基于Lucene的，所以很多的概念都是相似的，在了解elasticsearch之前要先了解一些信息检索系统的基础知识:</p>
 <h2 id="信息检索系统原理"><a href="#信息检索系统原理" class="headerlink" title="信息检索系统原理"></a>信息检索系统原理</h2><p>索引过程包括了创建索引，删除索引等等操作。那这里要先讲解一下倒排索引和正排索引的概念:</p>
@@ -854,7 +854,9 @@
 
       
 
+
     </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=701026&auto=1&height=66"></iframe>
   </aside>
 
 

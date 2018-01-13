@@ -124,13 +124,13 @@
 
 
 
-<meta name="description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排">
+<meta name="description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
 <meta name="keywords" content="java,信息检索">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lucene介绍及打分公式说明">
 <meta property="og:url" content="http://dong100136.github.io/2017/03/06/lucene介绍及打分公式说明/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排">
+<meta property="og:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcvnvorfpj30b90iyq3y.jpg">
@@ -143,7 +143,7 @@
 <meta property="og:updated_time" content="2017-11-05T05:20:34.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene介绍及打分公式说明">
-<meta name="twitter:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排">
+<meta name="twitter:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
 <meta name="twitter:image" content="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg">
 
 
@@ -484,7 +484,7 @@
       
 
       
-        <p>很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭</p>
 <h2 id="一-介绍"><a href="#一-介绍" class="headerlink" title="一.介绍"></a>一.介绍</h2><p><code>Lucene</code>是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。</p>
 <blockquote>
 <p><code>反向索引</code>，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排表:<br><img src="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg" alt=""><br>左边的指包含该词Term的文档Document。</p>
@@ -825,7 +825,9 @@
 
       
 
+
     </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=701026&auto=1&height=66"></iframe>
   </aside>
 
 
