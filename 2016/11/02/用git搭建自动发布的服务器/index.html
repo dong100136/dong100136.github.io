@@ -520,13 +520,13 @@
 <p>然后在服务器端创建仓库的工作目录,用于将代码同步到服务器上:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@localhost:~/test.git</span><br></pre></td></tr></table></figure>
 <p>然后在git上面创建一个hook，在test.git目录下有一个hooks目录放置,里面已经放了一些模板，默认末尾带sample的hook是不会执行的，通过去掉sample就行了。</p>
-<p>网上很多的教程都是说要修改post-receive文件，这个文件夹中并没有，只有post-update，但是好像功能是一样的<br>然后写好脚本后就可以了。脚本的内容如下:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">GIT_WORK_TREE=/home/git/test.git git checkout -f</span><br></pre></td></tr></table></figure></p>
+<p>网上很多的教程都是说要修改post-receive文件，这个文件夹中并没有，只有post-update，但是好像功能是一样的 然后写好脚本后就可以了。脚本的内容如下: <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">GIT_WORK_TREE=/home/git/test.git git checkout -f</span><br></pre></td></tr></table></figure></p>
 <p>一开始我是用的是git pull命令，这是不能实现同步的。同时，一定要记住确保这个脚本git用户有执行权限，否则执行不了，使用命令:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ./post-update</span><br></pre></td></tr></table></figure>
 <p>这样子，每次有人push新的内容上去之后，就会自动将内容同步到服务器上的工作目录了。</p>
 <p>但是这样还是没有发布出去的，我们可以在apache服务器的网站目录下创建一个软链接(硬链接不能链接文件夹)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sv /home/git/test.git /var/www/html/test</span><br></pre></td></tr></table></figure>
-<p>我们就大功告成了，我们通过访问主机下的test目录，就可以访问到我们的目录了，而且每次push后都可以直接在服务器上看到结果。这还是一个相当有用的技巧，通过编写不同的hook，可以实现很多不同的有意思的功能。╮(￣▽￣)╭ </p>
+<p>我们就大功告成了，我们通过访问主机下的test目录，就可以访问到我们的目录了，而且每次push后都可以直接在服务器上看到结果。这还是一个相当有用的技巧，通过编写不同的hook，可以实现很多不同的有意思的功能。╮(￣▽￣)╭</p>
 
       
     </div>
@@ -1206,6 +1206,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

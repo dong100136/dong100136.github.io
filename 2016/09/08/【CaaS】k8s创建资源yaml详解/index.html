@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod1234567891011121314151617181">
+<meta name="description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod 123456789101112131415161718">
 <meta name="keywords" content="docker,容器,k8s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【CaaS】k8s创建资源yaml详解">
 <meta property="og:url" content="http://dong100136.github.io/2016/09/08/【CaaS】k8s创建资源yaml详解/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod1234567891011121314151617181">
+<meta property="og:description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod 123456789101112131415161718">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【CaaS】k8s创建资源yaml详解">
-<meta name="twitter:description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod1234567891011121314151617181">
+<meta name="twitter:description" content="最近在写k8s管理平台的一个创建接口，需要对不同的资源文件进行转换和检查，所以这里做一个简单的总结 k8s 创建接口可以支持yaml和json两种格式，但是现在一般都是用yaml yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服 下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见 目前 Pod 123456789101112131415161718">
 
 
 
@@ -512,7 +512,8 @@
 <p>yaml使用缩进来便是层级结构，不知为什么在这里很想吐槽这个，看着很不舒服</p>
 <p>下面的一些注解都是基于自己的个人理解，不一定是对的，希望大家可以提出意见</p>
 <p>目前</p>
-<h1 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span> <span class="comment">#指定api版本，现在支持v1，extensions/v1beta1等</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span> <span class="comment">#资源类型</span></span><br><span class="line"><span class="attr">metadata:</span> <span class="comment">#资源的元数据</span></span><br><span class="line"><span class="attr"> name:</span> <span class="string">test</span> </span><br><span class="line"><span class="attr"> labels:</span> <span class="comment">#标签</span></span><br><span class="line"><span class="attr"> sex:</span> <span class="string">boy</span></span><br><span class="line"><span class="attr"> age:</span> <span class="number">18</span></span><br><span class="line"><span class="attr">spec:</span> <span class="comment">#specification，下面的很多资源是可以定义为缺省的</span></span><br><span class="line"><span class="attr"> restartPolicy:</span> <span class="string">Never</span> <span class="comment"># 当pod退出后，不进行重启，默认是自动重启的</span></span><br><span class="line"><span class="attr"> volumes:</span> <span class="comment">#定义一组挂载设备</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">volume</span> <span class="comment">#定义一个挂载设备的名字，必须是存在的一个volume</span></span><br><span class="line"><span class="attr"> hostPath:</span> <span class="string">/data/www/html</span> <span class="comment">#挂载设备类型为hostPath，路径为宿主机下的/data/www/html</span></span><br><span class="line"><span class="attr"> containers:</span> <span class="comment">#指定资源中的容器</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">container1</span> </span><br><span class="line"><span class="attr"> image:</span> <span class="string">“docker.coocla.org/ubuntu:last”</span> <span class="comment">#容器使用的镜像地址</span></span><br><span class="line"><span class="attr"> volumeMounts:</span></span><br><span class="line"><span class="attr"> - mountPath:</span> <span class="string">/mnt</span> <span class="comment">#挂载到容器的某个路径下</span></span><br><span class="line"><span class="attr"> name:</span> <span class="string">volume</span> <span class="comment">#挂载设备的名字，与volumes[*].name 需要对应</span></span><br><span class="line"><span class="attr"> livenessProbe:</span> <span class="comment">#容器健康监测</span></span><br><span class="line"><span class="attr"> httpGet:</span> <span class="comment">#http形式监测，返回200-399之间，则认为容器正常</span></span><br><span class="line"><span class="attr"> path:</span> <span class="string">/health</span></span><br><span class="line"><span class="attr"> port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr"> initialDelaySeconds:</span> <span class="number">15</span> <span class="comment">#表明第一次检测在容器启动后多长时间后开始</span></span><br><span class="line"><span class="attr"> timeoutSeconds:</span> <span class="number">1</span> <span class="comment">#检测的超时时间</span></span><br><span class="line"><span class="attr"> env:</span> <span class="comment">#指定容器中的环境变量</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">str</span> <span class="comment">#变量的名字</span></span><br><span class="line"><span class="attr"> value:</span> <span class="string">"hello world” 变量的值</span></span><br><span class="line"><span class="string"> command: ["</span><span class="string">/bin/bash",</span> <span class="string">"-c"</span><span class="string">]</span> <span class="string">覆盖容器中的Entrypoint,对应Dockefile中的ENTRYPOINT</span></span><br><span class="line"><span class="attr"> args:</span> <span class="string">["/bin/echo",</span> <span class="string">"$(str)"</span><span class="string">]</span> <span class="string">对应Dockerfile中CMD参数</span></span><br></pre></td></tr></table></figure>
+<h1 id="pod">Pod</h1>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span> <span class="comment">#指定api版本，现在支持v1，extensions/v1beta1等</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span> <span class="comment">#资源类型</span></span><br><span class="line"><span class="attr">metadata:</span> <span class="comment">#资源的元数据</span></span><br><span class="line"><span class="attr"> name:</span> <span class="string">test</span> </span><br><span class="line"><span class="attr"> labels:</span> <span class="comment">#标签</span></span><br><span class="line"><span class="attr"> sex:</span> <span class="string">boy</span></span><br><span class="line"><span class="attr"> age:</span> <span class="number">18</span></span><br><span class="line"><span class="attr">spec:</span> <span class="comment">#specification，下面的很多资源是可以定义为缺省的</span></span><br><span class="line"><span class="attr"> restartPolicy:</span> <span class="string">Never</span> <span class="comment"># 当pod退出后，不进行重启，默认是自动重启的</span></span><br><span class="line"><span class="attr"> volumes:</span> <span class="comment">#定义一组挂载设备</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">volume</span> <span class="comment">#定义一个挂载设备的名字，必须是存在的一个volume</span></span><br><span class="line"><span class="attr"> hostPath:</span> <span class="string">/data/www/html</span> <span class="comment">#挂载设备类型为hostPath，路径为宿主机下的/data/www/html</span></span><br><span class="line"><span class="attr"> containers:</span> <span class="comment">#指定资源中的容器</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">container1</span> </span><br><span class="line"><span class="attr"> image:</span> <span class="string">“docker.coocla.org/ubuntu:last”</span> <span class="comment">#容器使用的镜像地址</span></span><br><span class="line"><span class="attr"> volumeMounts:</span></span><br><span class="line"><span class="attr"> - mountPath:</span> <span class="string">/mnt</span> <span class="comment">#挂载到容器的某个路径下</span></span><br><span class="line"><span class="attr"> name:</span> <span class="string">volume</span> <span class="comment">#挂载设备的名字，与volumes[*].name 需要对应</span></span><br><span class="line"><span class="attr"> livenessProbe:</span> <span class="comment">#容器健康监测</span></span><br><span class="line"><span class="attr"> httpGet:</span> <span class="comment">#http形式监测，返回200-399之间，则认为容器正常</span></span><br><span class="line"><span class="attr"> path:</span> <span class="string">/health</span></span><br><span class="line"><span class="attr"> port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr"> initialDelaySeconds:</span> <span class="number">15</span> <span class="comment">#表明第一次检测在容器启动后多长时间后开始</span></span><br><span class="line"><span class="attr"> timeoutSeconds:</span> <span class="number">1</span> <span class="comment">#检测的超时时间</span></span><br><span class="line"><span class="attr"> env:</span> <span class="comment">#指定容器中的环境变量</span></span><br><span class="line"><span class="attr"> - name:</span> <span class="string">str</span> <span class="comment">#变量的名字</span></span><br><span class="line"><span class="attr"> value:</span> <span class="string">"hello world” 变量的值</span></span><br><span class="line"><span class="string"> command: ["</span><span class="string">/bin/bash",</span> <span class="string">"-c"</span><span class="string">]</span> <span class="string">覆盖容器中的Entrypoint,对应Dockefile中的ENTRYPOINT</span></span><br><span class="line"><span class="attr"> args:</span> <span class="string">["/bin/echo",</span> <span class="string">"$(str)"</span><span class="string">]</span> <span class="string">对应Dockerfile中CMD参数</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -804,7 +805,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Pod"><span class="nav-number">1.</span> <span class="nav-text">Pod</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pod"><span class="nav-number">1.</span> <span class="nav-text">Pod</span></a></li></ol></div>
             
 
           </div>
@@ -1221,6 +1222,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

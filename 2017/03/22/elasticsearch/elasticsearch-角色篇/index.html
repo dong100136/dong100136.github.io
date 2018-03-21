@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.maste">
+<meta name="description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍 在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.mast">
 <meta name="keywords" content="大数据,elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="elasticsearch-角色篇">
 <meta property="og:url" content="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-角色篇/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.maste">
+<meta property="og:description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍 在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.mast">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch-角色篇">
-<meta name="twitter:description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.maste">
+<meta name="twitter:description" content="在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。 角色介绍 在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。 可以通过下面的配置进行设置: 1234node.mast">
 
 
 
@@ -508,7 +508,8 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>在Elasticsearch中，节点的角色分为三种，分别为master node，data node，ingest node,不同的角色负责不同的工作，合理的配置这些节点，可以最大限度发挥集群的性能。</p>
-<h3 id="角色介绍"><a href="#角色介绍" class="headerlink" title="角色介绍"></a>角色介绍</h3><p>在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。</p>
+<h3 id="角色介绍">角色介绍</h3>
+<p>在一个ES节点中，每一个节点都可以充当一个或者多个角色，但是在较大的集群中，一般会将每一个角色都分开，这样可以保证集群的稳定性。</p>
 <p>可以通过下面的配置进行设置:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">node.master:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">node.data:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">node.ingest:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">http.enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -516,16 +517,13 @@
 </blockquote>
 <p>下面介绍一下每一种角色的功能和职责:</p>
 <ul>
-<li><p><code>master node</code>: 负责更新和同步集群信息，如集群配置，集群健康情况，index的信息等等，对集群的稳定性十分重要。这里由一个想吐槽的地方，ES的命名很特别坑人，<code>node.master</code>被设为true，<br>并不表示这个节点为被设置为master，而是有资格被选为master，实际上当前活动的master只有一个，如果没有被选上的，只会执行其他角色的任务，如client(接受请求)，<br>一般建议将master和data分离开，在较大的集群中，一般设置三个master节点，以提高稳定性。</p>
-</li>
-<li><p><code>data node</code>: 就是字面意思，data node是储存数据的节点</p>
-</li>
-<li><p><code>ingest node</code>: 是专门对文档进行预处理的，有点像logstash的功能，是es 5.x新推出的功能，没有作深入了解</p>
-</li>
-<li><p><code>client node</code>: 指开启了http端口的节点，这类节点可以接收用户的请求，如搜索，索引等，然后将请求分发到不同的数据节点，接收到数据节点的结果后进行汇总，然后返回给用户，这类节点对内存比较敏感，<br>特别是大量请求的时候</p>
-</li>
+<li><p><code>master node</code>: 负责更新和同步集群信息，如集群配置，集群健康情况，index的信息等等，对集群的稳定性十分重要。这里由一个想吐槽的地方，ES的命名很特别坑人，<code>node.master</code>被设为true， 并不表示这个节点为被设置为master，而是有资格被选为master，实际上当前活动的master只有一个，如果没有被选上的，只会执行其他角色的任务，如client(接受请求)， 一般建议将master和data分离开，在较大的集群中，一般设置三个master节点，以提高稳定性。</p></li>
+<li><p><code>data node</code>: 就是字面意思，data node是储存数据的节点</p></li>
+<li><p><code>ingest node</code>: 是专门对文档进行预处理的，有点像logstash的功能，是es 5.x新推出的功能，没有作深入了解</p></li>
+<li><p><code>client node</code>: 指开启了http端口的节点，这类节点可以接收用户的请求，如搜索，索引等，然后将请求分发到不同的数据节点，接收到数据节点的结果后进行汇总，然后返回给用户，这类节点对内存比较敏感， 特别是大量请求的时候</p></li>
 </ul>
-<h3 id="ES集群的工作流程"><a href="#ES集群的工作流程" class="headerlink" title="ES集群的工作流程"></a>ES集群的工作流程</h3><p>ES的常用端口有两个，分别为9200和9300，当然，也可以自行进行设置，9200用于响应restful请求，用于处理用户请求，而9300端口作为rpc端口，用于内部通信，内部的通信的节点和节点之间直接通信的</p>
+<h3 id="es集群的工作流程">ES集群的工作流程</h3>
+<p>ES的常用端口有两个，分别为9200和9300，当然，也可以自行进行设置，9200用于响应restful请求，用于处理用户请求，而9300端口作为rpc端口，用于内部通信，内部的通信的节点和节点之间直接通信的</p>
 <p>任意一个节点都会从master节点上得到一份完整的集群信息，这个信息包含了分片所在位置，各节点基本信息等等，利用这个信息，每一个节点都有能力独立完成索引和搜索的任务，无需经过master节点。</p>
 <p>当一个节点收到用户的一个请求的时候，这个节点就会作为client，解析用户的请求，任务分发给储存相应分片的节点后，将收到的结果进行汇总，然后返回给用户，完成一次完整的请求过程。</p>
 <p>具体细节可以参考前面的一遍文章，虽然写得也是一般般</p>
@@ -818,7 +816,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#角色介绍"><span class="nav-number">1.</span> <span class="nav-text">角色介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES集群的工作流程"><span class="nav-number">2.</span> <span class="nav-text">ES集群的工作流程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#角色介绍"><span class="nav-number">1.</span> <span class="nav-text">角色介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es集群的工作流程"><span class="nav-number">2.</span> <span class="nav-text">ES集群的工作流程</span></a></li></ol></div>
             
 
           </div>
@@ -1235,6 +1233,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。而这些blocks的位置信息也是储存">
+<meta name="description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介 在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。 而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。 而这些blocks的位置信息也">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux inode整理">
 <meta property="og:url" content="http://dong100136.github.io/2016/11/23/linux-inode/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。而这些blocks的位置信息也是储存">
+<meta property="og:description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介 在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。 而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。 而这些blocks的位置信息也">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux inode整理">
-<meta name="twitter:description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。而这些blocks的位置信息也是储存">
+<meta name="twitter:description" content="在网上看到一遍讲inode的文章，受益良多，所以整理一下。 inode简介 在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。 而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。 在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。 而这些blocks的位置信息也">
 
 
 
@@ -508,15 +508,19 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>在网上看到一遍讲inode的文章，受益良多，所以整理一下。</p>
-<h1 id="inode简介"><a href="#inode简介" class="headerlink" title="inode简介"></a>inode简介</h1><p>在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。<br>而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。</p>
-<p>在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。<br>而这些blocks的位置信息也是储存在inode中。</p>
+<h1 id="inode简介">inode简介</h1>
+<p>在Linux的文件系统中，文件的数据可以分为两个部分，一部分是文件的元信息，另一部分是文件的数据信息。 而这里的元信息就是我们说的inode，包含了文件名，文件大小，文件的权限等等信息。</p>
+<p>在文件系统中，数据区被分为很多个block，最常见的block大小为4KB，文件会占有多个block。 而这些blocks的位置信息也是储存在inode中。</p>
 <p>每个inode都需要占据一定的空间，一般为125B。通过<code>stat &lt;filename&gt;</code>可以查看相关的inode信息。</p>
-<h1 id="linux文件管理原理"><a href="#linux文件管理原理" class="headerlink" title="linux文件管理原理"></a>linux文件管理原理</h1><p>linux中识别文件使用的是inode号码，而不是文件名，而且一个inode号码可以对应多个文件名。</p>
+<h1 id="linux文件管理原理">linux文件管理原理</h1>
+<p>linux中识别文件使用的是inode号码，而不是文件名，而且一个inode号码可以对应多个文件名。</p>
 <p>在系统需要根据一个文件名打开一个文件的时候，事实上是先通过文件名查找到对应的inode号码，然后获取相关的文件元信息，最后到指定的blocks中读取文件</p>
-<p>而目录也是一种特殊的文件，我们在Linux中，如果我们只有wr-权限的话，只能通过ls查看文件夹中文件的内容，但是不能通过ll查看详细的信息。<br>目录作为一种特殊的文件，由两部分组成，目录自己的元信息，数据区则储存了目录中的文件的inode和文件名，而使用ll实际上是需要通过目录内文件的inode查找他们的<br>详细信息，所以没有x权限的时候，就不能得到里面的文件详细信息。</p>
-<h1 id="软链接和硬链接"><a href="#软链接和硬链接" class="headerlink" title="软链接和硬链接"></a>软链接和硬链接</h1><p>使用<code>ln &lt;filename&gt; &lt;linkname&gt;</code> 实际上创建的硬链接文件实际上和原来的文件用的是同一个inode号码，所以这是新创建的文件实质上就是原文件，所以对这个新文件的所有操作都会影响原文件，但是删除一个文件名不会影响原文件，简单来看，就是inode号码和文件名是一对多的关系。使用<code>ls -li</code> 可以查看文件inode被多少个文件名绑定。当绑定这个inode的文件名数减为0的时候，系统就会回收这个文件。</p>
+<p>而目录也是一种特殊的文件，我们在Linux中，如果我们只有wr-权限的话，只能通过ls查看文件夹中文件的内容，但是不能通过ll查看详细的信息。 目录作为一种特殊的文件，由两部分组成，目录自己的元信息，数据区则储存了目录中的文件的inode和文件名，而使用ll实际上是需要通过目录内文件的inode查找他们的 详细信息，所以没有x权限的时候，就不能得到里面的文件详细信息。</p>
+<h1 id="软链接和硬链接">软链接和硬链接</h1>
+<p>使用<code>ln &lt;filename&gt; &lt;linkname&gt;</code> 实际上创建的硬链接文件实际上和原来的文件用的是同一个inode号码，所以这是新创建的文件实质上就是原文件，所以对这个新文件的所有操作都会影响原文件，但是删除一个文件名不会影响原文件，简单来看，就是inode号码和文件名是一对多的关系。使用<code>ls -li</code> 可以查看文件inode被多少个文件名绑定。当绑定这个inode的文件名数减为0的时候，系统就会回收这个文件。</p>
 <p>使用<code>ln -s &lt;filename&gt; &lt;linkname&gt;</code> 创建的软链接，又叫符号链接。他们指向的inode是不同的，访问软链接是会根据里面储存的原文件地址转向访问原文件。所以当我们删除了原文件之后，软链接就无法进行访问，有点相当于windows里的快捷方式。当然，创建软链接不会改变一个文件的链接数。</p>
-<h1 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h1><p>这种inode号码和文件名进行分离，其中一种优点就是软件更新。当一个文件被打开之后，使用的都是inode号码，而不是文件名。在不关闭软件的情况下，如果我们更新了一个文件，就是创建了一个新的inode，并不影响原来的inode，当软件释放了资源之后，系统就会回收这个文件。</p>
+<h1 id="优点">优点</h1>
+<p>这种inode号码和文件名进行分离，其中一种优点就是软件更新。当一个文件被打开之后，使用的都是inode号码，而不是文件名。在不关闭软件的情况下，如果我们更新了一个文件，就是创建了一个新的inode，并不影响原来的inode，当软件释放了资源之后，系统就会回收这个文件。</p>
 <p>文件移动和重命名都不会改变文件inode号码。</p>
 
       
@@ -1222,6 +1226,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

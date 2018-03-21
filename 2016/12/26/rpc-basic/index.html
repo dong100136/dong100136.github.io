@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为clien">
+<meta name="description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立 参数的序列化和传递 运行结果的获取  下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client和w">
 <meta name="keywords" content="java,spark,rpc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Socket的rpc简单实践">
 <meta property="og:url" content="http://dong100136.github.io/2016/12/26/rpc-basic/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为clien">
+<meta property="og:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立 参数的序列化和传递 运行结果的获取  下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client和w">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Socket的rpc简单实践">
-<meta name="twitter:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立  参数的序列化和传递  运行结果的获取   下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为clien">
+<meta name="twitter:description" content="无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:  调用和被调用两者之间通信的建立 参数的序列化和传递 运行结果的获取  下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。 程序分为client和w">
 
 
 
@@ -508,13 +508,10 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>无论是分布式程序还是微服务，都需要涉及到远程进程的调用，这就需要借助rpc的力量。rpc的目的是将网络通信的细节进行封装，使调用远程服务像调用本地服务一样方便。实现rpc的方法有很多种，但是解决的问题基本相同:</p>
-<ol>
-<li><p>调用和被调用两者之间通信的建立</p>
-</li>
-<li><p>参数的序列化和传递</p>
-</li>
-<li><p>运行结果的获取</p>
-</li>
+<ol type="1">
+<li><p>调用和被调用两者之间通信的建立</p></li>
+<li><p>参数的序列化和传递</p></li>
+<li><p>运行结果的获取</p></li>
 </ol>
 <p>下面是自己写的一个简单的DEMO，利用socket和java的动态代理实现简单的rpc。</p>
 <p>程序分为client和worker，client启动之后会启动一个线程专门进行监听8080端口，并管理连接进来的socket连接。worker启动之后会建立一个socket连接到client。</p>
@@ -526,11 +523,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker端基于反射实现函数调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">handleRequest</span><span class="params">(String className,String methodName,Object[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class service = Class.forName(className + <span class="string">"Impl"</span>);</span><br><span class="line">            Constructor constructor = service.getDeclaredConstructor();</span><br><span class="line">            Object obj = constructor.newInstance();</span><br><span class="line"></span><br><span class="line">            Method method = service.getDeclaredMethod(methodName);</span><br><span class="line">            Object rs = method.invoke(obj, args);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> rs;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>代码比较简单，源码可以看<a href="https://github.com/dong100136/PracticeCode/tree/master/RPC-example" target="_blank" rel="noopener">这里</a>👈👈👈👈</p>
 <p>这里有两个小坑:</p>
-<ol>
-<li><p>对于socket，inputStream，outputStream只能获取一次，当获取两次之后就会出问题</p>
-</li>
-<li><p>接口是不能进行动态代理的，接口不能实例化</p>
-</li>
+<ol type="1">
+<li><p>对于socket，inputStream，outputStream只能获取一次，当获取两次之后就会出问题</p></li>
+<li><p>接口是不能进行动态代理的，接口不能实例化</p></li>
 </ol>
 
       
@@ -1215,6 +1210,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

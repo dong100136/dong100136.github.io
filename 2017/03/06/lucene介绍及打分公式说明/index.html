@@ -124,13 +124,13 @@
 
 
 
-<meta name="description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
+<meta name="description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍 Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的">
 <meta name="keywords" content="java,信息检索">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lucene介绍及打分公式说明">
 <meta property="og:url" content="http://dong100136.github.io/2017/03/06/lucene介绍及打分公式说明/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
+<meta property="og:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍 Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcvnvorfpj30b90iyq3y.jpg">
@@ -143,7 +143,7 @@
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene介绍及打分公式说明">
-<meta name="twitter:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒">
+<meta name="twitter:description" content="很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭ 一.介绍 Lucene是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。  反向索引，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的">
 <meta name="twitter:image" content="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg">
 
 
@@ -517,25 +517,28 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>很久没有写博客了，补一下这个，主要是一个根据csdn上的一个系列文章进行的一些总结，学得不深，只是些皮毛，见笑了。╮(￣▽￣)╭</p>
-<h2 id="一-介绍"><a href="#一-介绍" class="headerlink" title="一.介绍"></a>一.介绍</h2><p><code>Lucene</code>是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。</p>
+<h2 id="一.介绍">一.介绍</h2>
+<p><code>Lucene</code>是一种基于java的全文检索库，通过对非结构化数据和结构化数据建立索引来达到加快搜索的速度。</p>
 <blockquote>
-<p><code>反向索引</code>，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排表:<br><img src="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg" alt=""><br>左边的指包含该词Term的文档Document。</p>
+<p><code>反向索引</code>，我们平时的文件系统都是通过文件映射到文件内容的过程，这种可以叫做正向索引，而反向索引则是反过来，通过文件的内容反向指向文件，下面是一个常见的倒排表: <img src="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcv862h9qj30f4049js2.jpg"> 左边的指包含该词Term的文档Document。</p>
 </blockquote>
-<h2 id="二-索引建立及使用"><a href="#二-索引建立及使用" class="headerlink" title="二. 索引建立及使用"></a>二. 索引建立及使用</h2><p>还是对于上面这个图，我们先了解一下搜索的过程:</p>
+<h2 id="二.-索引建立及使用">二. 索引建立及使用</h2>
+<p>还是对于上面这个图，我们先了解一下搜索的过程:</p>
 <p>加入我们现在想要搜索luceme和solr，但是不想包含hadoop，大概等于(lucene+solr-hadoop)，则搜索引擎会分别找到的lucene，solr，hadoop的倒排表，然后将lucene和solr的倒排进行合并操作，在和hadoop作差，就可以得到lucene和solr但不包含hadoop的文档列表。但是这里有一个小问题，通过这样的操作我们的确可以得到我们想要的文档，但是符合我们想要的文档可能有上千上万个，我们还需要对得到的结构进行打分排序，将更符合搜索要求的文档放到前面，从而更快让我们找到想要的文档。</p>
 <p><strong>下面看一下索引的建立过程:</strong></p>
-<ol>
+<ol type="1">
 <li>对文档Document进行分词处理</li>
 <li>去掉停用词</li>
 <li>对词进行预处理，如将大小写统一转换为小写，去掉一些词的变形，复数形式等等操作</li>
-<li>将得到的词转换为索引:<br><img src="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcvnvorfpj30b90iyq3y.jpg" alt=""></li>
+<li>将得到的词转换为索引: <img src="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcvnvorfpj30b90iyq3y.jpg"></li>
 </ol>
-<p><img src="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcvosls1zj30f50dh0uj.jpg" alt=""></p>
-<h2 id="三-评分公式整理"><a href="#三-评分公式整理" class="headerlink" title="三. 评分公式整理"></a>三. 评分公式整理</h2><p>在搜索的过程由一个非常重要的步骤，就是对文档进行打分排序，下面是对打分公式的分析:</p>
+<p><img src="https://ww2.sinaimg.cn/large/006tNbRwgy1fdcvosls1zj30f50dh0uj.jpg"></p>
+<h2 id="三.-评分公式整理">三. 评分公式整理</h2>
+<p>在搜索的过程由一个非常重要的步骤，就是对文档进行打分排序，下面是对打分公式的分析:</p>
 <p>Lucene搜索是采用的经典的TF-IDF打分机制:</p>
 <p><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf#Example_of_tf.E2.80.93idf" target="_blank" rel="noopener">TF-IDF解析</a></p>
-<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcw2riq2cj308n021glk.jpg" alt=""></p>
-<p><img src="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcwb7bdl7j307j01mglj.jpg" alt=""></p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcw2riq2cj308n021glk.jpg"></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNbRwgy1fdcwb7bdl7j307j01mglj.jpg"></p>
 <p>用这个公式可以评价一个词对文档的价值，这个公式分为两部分看，TF指一个词在文档中出现的频率，如果一个词出现的次数越多，对文档来说这个词约重要，另一部分为IDF，可以看作一个词的信息量，如果一个词在其他文档中的出现的次数越多，则说明这个词不太重要，信息量越小。</p>
 <p>网上看到对这个文档的一种日常应用，挺有趣的，也说一下吧。</p>
 <blockquote>
@@ -543,18 +546,18 @@
 </blockquote>
 <p>在了解这个公式之后，我们看看如何评价两个文档的相似性。</p>
 <p>评价文档相似性采用的向量模型(VSM)，每一个词Term为一个维度，所有的词组成一个向量空间，然后采用余弦角公式进行计算相似对:</p>
-<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcw8i0xxzj30hn02dt8q.jpg" alt=""></p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcw8i0xxzj30hn02dt8q.jpg"></p>
 <p>所以，在搜索打分的过程就可以看作搜索词和文档相似度的计算，如果越相似，则分数越高，这就是Lucene打分的核心概念，下面是Lucene的打分公式:</p>
-<p><img src="https://ww3.sinaimg.cn/large/006tNbRwgy1fdcwch9lj6j30ir01u3yl.jpg" alt=""></p>
+<p><img src="https://ww3.sinaimg.cn/large/006tNbRwgy1fdcwch9lj6j30ir01u3yl.jpg"></p>
 <p>通过推导和化简，可以得到下面👇的公式:</p>
-<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcwanxizsj30hs011mx9.jpg" alt=""></p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNbRwgy1fdcwanxizsj30hs011mx9.jpg"></p>
 <p>看看每一个部分都是什么意思:</p>
 <p>从原始公式讲起，核心部分就是那个向量公式，这个很容易理解。</p>
 <p>然后看最简单的Boost项，query-boost,doc-boost，这些都是对部分词，部分文档的权重进行调整的，属于人为设置的部分。</p>
 <p>之后是coord，这表示搜索词在文档中的命中度，如果文档含有搜索词越多，则这个分数越高，否则越低，这主要是文档相似性越高，但不一定含有搜索词。</p>
 <p>还有一个参数是doc-len-norm，这个文档长度归一化用的，如果按照其他的参数看，一个文档越长，则他的分数会比文档比较小的高，这样是不公平的，所以需要做一个归一化。在计算的余弦角的时候是完全不考虑文档的长度，而计算coord则包含了文档长度的影响。</p>
 <blockquote>
-<p>对于任意一个term，在长的文档中的tf要大的多，因而分数也越高，这样对小的文档不公平，举一个极端的例子，在一篇1000万个词的鸿篇巨著中，”lucene”这个词出现了11次，而在一篇12个词的短小文档中，”lucene”这个词出现了10次，如果不考虑长度在内，当然鸿篇巨著应该分数更高，然而显然这篇小文档才是真正关注”lucene”的。</p>
+<p>对于任意一个term，在长的文档中的tf要大的多，因而分数也越高，这样对小的文档不公平，举一个极端的例子，在一篇1000万个词的鸿篇巨著中，“lucene”这个词出现了11次，而在一篇12个词的短小文档中，“lucene”这个词出现了10次，如果不考虑长度在内，当然鸿篇巨著应该分数更高，然而显然这篇小文档才是真正关注“lucene”的。</p>
 </blockquote>
 <p>如果完全进行归一化处理，则对长文档也不公平，所以这个归一化的公式和文档长度不是成正比的，这个公式甚至可以使用抛物线神马的。</p>
 <p>👉<a href="http://blog.csdn.net/forfuture1978/article/details/5353126" target="_blank" rel="noopener">这里是公式推导的一篇文章</a></p>
@@ -847,7 +850,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-介绍"><span class="nav-number">1.</span> <span class="nav-text">一.介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-索引建立及使用"><span class="nav-number">2.</span> <span class="nav-text">二. 索引建立及使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-评分公式整理"><span class="nav-number">3.</span> <span class="nav-text">三. 评分公式整理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一.介绍"><span class="nav-number">1.</span> <span class="nav-text">一.介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二.-索引建立及使用"><span class="nav-number">2.</span> <span class="nav-text">二. 索引建立及使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三.-评分公式整理"><span class="nav-number">3.</span> <span class="nav-text">三. 评分公式整理</span></a></li></ol></div>
             
 
           </div>
@@ -1264,6 +1267,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

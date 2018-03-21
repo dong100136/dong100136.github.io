@@ -124,17 +124,17 @@
 
 
 
-<meta name="description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践 akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作  不要传递可变对象，传递可变对象会导致一">
+<meta name="description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是 scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践  akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作 不要传递可变对象，传递可变对象会导致">
 <meta property="og:type" content="article">
 <meta property="og:title" content="akka学习小记">
 <meta property="og:url" content="http://dong100136.github.io/2017/01/02/akka-basic/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践 akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作  不要传递可变对象，传递可变对象会导致一">
+<meta property="og:description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是 scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践  akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作 不要传递可变对象，传递可变对象会导致">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="akka学习小记">
-<meta name="twitter:description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践 akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作  不要传递可变对象，传递可变对象会导致一">
+<meta name="twitter:description" content="Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是 scala推荐的并行模型，学习学习… 未完，长期更新。。。 akka最佳实践  akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作 不要传递可变对象，传递可变对象会导致">
 
 
 
@@ -506,29 +506,35 @@
       
 
       
-        <script src="/assets/js/APlayer.min.js"> </script><p>Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是<br>scala推荐的并行模型，学习学习…</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>Akka是一个基于消息通信的多进程系统，使用actor作为执行任务的单元，actor之间只能通过消息进行通信。actor模型是 scala推荐的并行模型，学习学习…</p>
 <p>未完，长期更新。。。</p>
-<h2 id="akka最佳实践"><a href="#akka最佳实践" class="headerlink" title="akka最佳实践"></a>akka最佳实践</h2><ol>
-<li><p>akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作</p>
-</li>
-<li><p>不要传递可变对象，传递可变对象会导致一些不可预料问题</p>
-</li>
-<li><p>actor是一个状态和表现的容器，不要向actor发送状态等信息(如scala中的闭包)，以确保系统的稳定</p>
-</li>
-<li><p>最高层的actor是处理错误的核心部分，尽量不要太多</p>
-</li>
+<h2 id="akka最佳实践">akka最佳实践</h2>
+<ol type="1">
+<li><p>akka中actor应该像一个优秀的合作者，高效地完成自己的工作，尽量不去影响他人，换句话来说就是让actor的工作基于事件驱动，不要包含一些阻塞的工作</p></li>
+<li><p>不要传递可变对象，传递可变对象会导致一些不可预料问题</p></li>
+<li><p>actor是一个状态和表现的容器，不要向actor发送状态等信息(如scala中的闭包)，以确保系统的稳定</p></li>
+<li><p>最高层的actor是处理错误的核心部分，尽量不要太多</p></li>
 </ol>
-<h2 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h2><p>Actor是Akka中执行任务的最小单元，作为一个运行的容器，其包括状态，行为，邮箱，子Actor和监控策略几个部分。</p>
+<h2 id="actor">Actor</h2>
+<p>Actor是Akka中执行任务的最小单元，作为一个运行的容器，其包括状态，行为，邮箱，子Actor和监控策略几个部分。</p>
 <p>在Akka系统中Actor呈树状结构，这样很利于管理进程。</p>
-<h3 id="Actor引用"><a href="#Actor引用" class="headerlink" title="Actor引用"></a>Actor引用</h3><p>外部指定Actor必须使用ActorRef</p>
-<h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>Actor内部可以包含一些变量表示其所在状态，如计数器等等，这些变量不受其他Actor所影响</p>
-<h3 id="行为"><a href="#行为" class="headerlink" title="行为"></a>行为</h3><p>每当接受到一个消息，Actor会匹配对应的处理函数</p>
-<h3 id="邮箱"><a href="#邮箱" class="headerlink" title="邮箱"></a>邮箱</h3><p>每个Actor又且只有一个邮箱，接收其他Actor发送来的消息，Actor收到的消息会在邮箱中进行排队，等待被处理。<br>邮箱中的消息按照发送消息的顺序排序，这有两种情况，从不同Actor发送来的消息到达邮箱之后没有固定的顺序，但是<br>同一Actor发送到同一个Actor的消息一定是按照顺序的。</p>
+<h3 id="actor引用">Actor引用</h3>
+<p>外部指定Actor必须使用ActorRef</p>
+<h3 id="状态">状态</h3>
+<p>Actor内部可以包含一些变量表示其所在状态，如计数器等等，这些变量不受其他Actor所影响</p>
+<h3 id="行为">行为</h3>
+<p>每当接受到一个消息，Actor会匹配对应的处理函数</p>
+<h3 id="邮箱">邮箱</h3>
+<p>每个Actor又且只有一个邮箱，接收其他Actor发送来的消息，Actor收到的消息会在邮箱中进行排队，等待被处理。 邮箱中的消息按照发送消息的顺序排序，这有两种情况，从不同Actor发送来的消息到达邮箱之后没有固定的顺序，但是 同一Actor发送到同一个Actor的消息一定是按照顺序的。</p>
 <p>而邮箱的实现有多种不同的选择，默认为FIFO，也可以选择优先队列顺序来进行处理</p>
-<h3 id="子Actor"><a href="#子Actor" class="headerlink" title="子Actor"></a>子Actor</h3><p>在Akka系统中Actor采用树状结构进行管理，没有个actor都可以成为监控者。每个Actor可以通过context.actorOf()来创建<br>actor，这种创建和停止都是异步进行的，并不会阻塞线程。</p>
-<h3 id="监控策略"><a href="#监控策略" class="headerlink" title="监控策略"></a>监控策略</h3><p>监控策略是actor处理子actor错误情况的机制，是actor系统组织结构的基础，一旦创建之后不能进行修改。</p>
-<h3 id="Actor的终止"><a href="#Actor的终止" class="headerlink" title="Actor的终止"></a>Actor的终止</h3><p>当一个Actor终止之后，其邮箱中的消息会被放进系统的死信邮箱，并且他的邮箱会被系统邮箱进行替代。</p>
-<h2 id="监管和监控"><a href="#监管和监控" class="headerlink" title="监管和监控"></a>监管和监控</h2><p>actor系统提供了四种不同的处理子actor错误的方法，分别是</p>
+<h3 id="子actor">子Actor</h3>
+<p>在Akka系统中Actor采用树状结构进行管理，没有个actor都可以成为监控者。每个Actor可以通过context.actorOf()来创建 actor，这种创建和停止都是异步进行的，并不会阻塞线程。</p>
+<h3 id="监控策略">监控策略</h3>
+<p>监控策略是actor处理子actor错误情况的机制，是actor系统组织结构的基础，一旦创建之后不能进行修改。</p>
+<h3 id="actor的终止">Actor的终止</h3>
+<p>当一个Actor终止之后，其邮箱中的消息会被放进系统的死信邮箱，并且他的邮箱会被系统邮箱进行替代。</p>
+<h2 id="监管和监控">监管和监控</h2>
+<p>actor系统提供了四种不同的处理子actor错误的方法，分别是</p>
 <ul>
 <li>恢复</li>
 <li>重启</li>
@@ -817,7 +823,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#akka最佳实践"><span class="nav-number">1.</span> <span class="nav-text">akka最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Actor"><span class="nav-number">2.</span> <span class="nav-text">Actor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor引用"><span class="nav-number">2.1.</span> <span class="nav-text">Actor引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态"><span class="nav-number">2.2.</span> <span class="nav-text">状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为"><span class="nav-number">2.3.</span> <span class="nav-text">行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邮箱"><span class="nav-number">2.4.</span> <span class="nav-text">邮箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子Actor"><span class="nav-number">2.5.</span> <span class="nav-text">子Actor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监控策略"><span class="nav-number">2.6.</span> <span class="nav-text">监控策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor的终止"><span class="nav-number">2.7.</span> <span class="nav-text">Actor的终止</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监管和监控"><span class="nav-number">3.</span> <span class="nav-text">监管和监控</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#akka最佳实践"><span class="nav-number">1.</span> <span class="nav-text">akka最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#actor"><span class="nav-number">2.</span> <span class="nav-text">Actor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#actor引用"><span class="nav-number">2.1.</span> <span class="nav-text">Actor引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态"><span class="nav-number">2.2.</span> <span class="nav-text">状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为"><span class="nav-number">2.3.</span> <span class="nav-text">行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邮箱"><span class="nav-number">2.4.</span> <span class="nav-text">邮箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子actor"><span class="nav-number">2.5.</span> <span class="nav-text">子Actor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监控策略"><span class="nav-number">2.6.</span> <span class="nav-text">监控策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#actor的终止"><span class="nav-number">2.7.</span> <span class="nav-text">Actor的终止</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监管和监控"><span class="nav-number">3.</span> <span class="nav-text">监管和监控</span></a></li></ol></div>
             
 
           </div>
@@ -1234,6 +1240,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

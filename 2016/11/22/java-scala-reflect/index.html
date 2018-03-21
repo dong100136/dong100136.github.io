@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
+<meta name="description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 java虚拟机的类加载机制 在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。 其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。 当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java反射机制学习">
 <meta property="og:url" content="http://dong100136.github.io/2016/11/22/java-scala-reflect/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
+<meta property="og:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 java虚拟机的类加载机制 在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。 其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。 当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java反射机制学习">
-<meta name="twitter:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。  java虚拟机的类加载机制在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到">
+<meta name="twitter:description" content="泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 java虚拟机的类加载机制 在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。 其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。 当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加">
 
 
 
@@ -507,14 +507,17 @@
       
 
       
-        <script src="/assets/js/APlayer.min.js"> </script><p>泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。 </p>
-<h1 id="java虚拟机的类加载机制"><a href="#java虚拟机的类加载机制" class="headerlink" title="java虚拟机的类加载机制"></a>java虚拟机的类加载机制</h1><p>在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。<br>其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。<br>当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到JVM中，紧接着提取其中类型信息，加载到方法区中。<br>其中的类型信息包括类的全限定名，字段信息，方法信息等等。<br>而这些被加载的类型信息可以通过java的一个基础类Class来进行访问。</p>
-<h1 id="java的反射机制"><a href="#java的反射机制" class="headerlink" title="java的反射机制"></a>java的反射机制</h1><p>实现反射机制，主要依赖四种类:Class，Constructor，Method，Field，分别对应一个类的构造器，方法和属性，通过访问这些类，我们可以了解类里面的情况。</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>泛型，反射等属于JAVA等语言的高级特性，最近想看一些源码，无奈不懂这些基本是寸步难行，所以先恶补一些这些东西先。</p>
+<h1 id="java虚拟机的类加载机制">java虚拟机的类加载机制</h1>
+<p>在java虚拟机中有一个运行时的数据区，这个数据区可以分为三个部分，分别是方法区，栈区和堆区。 其中今天关注的重点就是方法区，方法区主要是放运行时加载的类信息。 当JVM需要加载某个类的时候，会使用ClassLoader去查找相应的class文件，然后加载到JVM中，紧接着提取其中类型信息，加载到方法区中。 其中的类型信息包括类的全限定名，字段信息，方法信息等等。 而这些被加载的类型信息可以通过java的一个基础类Class来进行访问。</p>
+<h1 id="java的反射机制">java的反射机制</h1>
+<p>实现反射机制，主要依赖四种类:Class，Constructor，Method，Field，分别对应一个类的构造器，方法和属性，通过访问这些类，我们可以了解类里面的情况。</p>
 <p>下面是一个简单的示范:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestFlect</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException </span>&#123;</span><br><span class="line">        Class PersonClass = Person.class;</span><br><span class="line">        <span class="comment">//获得构造器,然后创建一个对象</span></span><br><span class="line">        Constructor constructor = PersonClass.getDeclaredConstructor(String.class,Integer.class);</span><br><span class="line">        constructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Person person = (Person) constructor.newInstance(<span class="string">"stone"</span>,<span class="number">123</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取一个属性和一个方法</span></span><br><span class="line">        Class[] classParams = <span class="keyword">new</span> Class[<span class="number">1</span>];</span><br><span class="line">        classParams[<span class="number">0</span>]=String.class;</span><br><span class="line">        Method personMethod = PersonClass.getDeclaredMethod(<span class="string">"print"</span>,classParams);</span><br><span class="line">        Field personNameField = PersonClass.getDeclaredField(<span class="string">"name"</span>);</span><br><span class="line">        <span class="comment">//设置为public</span></span><br><span class="line">        personMethod.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        personNameField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        personMethod.invoke(person,<span class="string">"Hello,"</span>+personNameField.get(person));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Person</span><span class="params">(String name, Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(String text)</span></span>&#123;</span><br><span class="line">        System.out.println(text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="反射机制的用途"><a href="#反射机制的用途" class="headerlink" title="反射机制的用途"></a>反射机制的用途</h1><p>众所周知，java和scala为静态语言，一般来说是很难在运行的时候改变自己已经编译好的行为，而动态语言就具有这种能力，如下面代码:</p>
+<h1 id="反射机制的用途">反射机制的用途</h1>
+<p>众所周知，java和scala为静态语言，一般来说是很难在运行的时候改变自己已经编译好的行为，而动态语言就具有这种能力，如下面代码:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> username = $(<span class="string">"#username"</span>).val</span><br><span class="line"><span class="keyword">var</span> test = <span class="string">"console.log('"</span>+username+<span class="string">"')"</span></span><br><span class="line"><span class="built_in">eval</span>(test)</span><br></pre></td></tr></table></figure>
-<p>这个代码没什么实际意义，只是一个示范，那BB了这么久，反射的常用场景是什么呢？作为一个Web开发者，最常见的就是ORM数据库的自动对应特性，<br>我们只需定义一个和数据库表对应的对象，就可以自动实现数据库的增删查改，大家都知道这个底层实现就是基于JDBC，通过JAVA的反射机制，就可以自动生成对应的sql语句，<br>从而实现自动完成这些底层的操作。另一个常见的场景就是JSON对象自动生成操作，通过反射机制，可以自动更具属性和值生成对应的键值对。<br>可以说反射是很多框架的基础，通过反射，可以大大增强了代码可扩展性。</p>
+<p>这个代码没什么实际意义，只是一个示范，那BB了这么久，反射的常用场景是什么呢？作为一个Web开发者，最常见的就是ORM数据库的自动对应特性， 我们只需定义一个和数据库表对应的对象，就可以自动实现数据库的增删查改，大家都知道这个底层实现就是基于JDBC，通过JAVA的反射机制，就可以自动生成对应的sql语句， 从而实现自动完成这些底层的操作。另一个常见的场景就是JSON对象自动生成操作，通过反射机制，可以自动更具属性和值生成对应的键值对。 可以说反射是很多框架的基础，通过反射，可以大大增强了代码可扩展性。</p>
 
       
     </div>
@@ -1219,6 +1222,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

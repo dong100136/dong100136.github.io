@@ -124,19 +124,19 @@
 
 
 
-<meta name="description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(">
+<meta name="description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64 在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: Blob Blo">
 <meta name="keywords" content="前端,js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="前端实现图片的裁剪和上传">
 <meta property="og:url" content="http://dong100136.github.io/2016/12/16/pic-upload/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(">
+<meta property="og:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64 在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: Blob Blo">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://i1.piimg.com/567571/e3d8be700339d16d.png">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端实现图片的裁剪和上传">
-<meta name="twitter:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: BlobBlob(">
+<meta name="twitter:description" content="图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。 主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇 Blob，DataURL,Base64 在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理: Blob Blo">
 <meta name="twitter:image" content="http://i1.piimg.com/567571/e3d8be700339d16d.png">
 
 
@@ -511,32 +511,41 @@
       
         <script src="/assets/js/APlayer.min.js"> </script><p>图片裁剪上传是一个非常常见的功能，如上传头像，上传的图片需要指定比例，理论上来说，这是一件比较简单的事，但是！！由于安全的原因，js是不能直接访问的本地的文件。</p>
 <p>主要的难点在于图片的读取和裁剪后的图片转换为数据流进行上传，下面我们慢慢分析:👇</p>
-<h3 id="Blob，DataURL-Base64"><a href="#Blob，DataURL-Base64" class="headerlink" title="Blob，DataURL,Base64"></a>Blob，DataURL,Base64</h3><p>在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理:</p>
-<h4 id="Blob"><a href="#Blob" class="headerlink" title="Blob"></a>Blob</h4><p>Blob(Binary Large Object) 大型二进制对象，很多人在学习数据库的时候可能都已经接触过Blob进行，但是这里HTML5中的Blob对象和mysql中的还是好区别的，数据库中Blob只是一个二进制容器，而HTML5中的Blob带有一些文件名，文件类型相关的信息。</p>
+<h3 id="blobdataurlbase64">Blob，DataURL,Base64</h3>
+<p>在前端处理文件对象的时候，需要和这几个对象打交道，理清他们之间的关系有利于我们理解上传的原理:</p>
+<h4 id="blob">Blob</h4>
+<p>Blob(Binary Large Object) 大型二进制对象，很多人在学习数据库的时候可能都已经接触过Blob进行，但是这里HTML5中的Blob对象和mysql中的还是好区别的，数据库中Blob只是一个二进制容器，而HTML5中的Blob带有一些文件名，文件类型相关的信息。</p>
 <p>在表单中传送文件，发送的就是Blob对象。</p>
 <p>下面是一个小实验，创建一个Blob对象，然后将它发送出去:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var html = &quot;&lt;h1&gt;hello world&lt;/h1&gt;&quot;;</span><br><span class="line">var htmlBlob = new Blob([html],&#123;type:&quot;text/plain&quot;&#125;);</span><br><span class="line"></span><br><span class="line">// 创建表单</span><br><span class="line">var formData = new FormData();</span><br><span class="line">formData.append(&quot;name&quot;,&quot;test&quot;);</span><br><span class="line">formData.append(&quot;file&quot;,htmlBlob);</span><br><span class="line"></span><br><span class="line">// 创建ajax</span><br><span class="line">var request = new XMLHttpRequest();</span><br><span class="line">request.open(&quot;POST&quot;,&quot;http://localhost/test&quot;);</span><br><span class="line">request.send(formData);</span><br></pre></td></tr></table></figure>
-<p><img src="http://i1.piimg.com/567571/e3d8be700339d16d.png" alt=""></p>
+<p><img src="http://i1.piimg.com/567571/e3d8be700339d16d.png"></p>
 <p>从图中可以看到表单的Content-Type多了一个边界的标识符，通过这个方法，就可以在表单中传输多个文件，那就有另外一个问题了，如果文件过大怎么办？Blob支持分割操作，每一个Blob对象都可以记录自己的偏移位置，在服务器中可以重新进行组装。</p>
-<h4 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h4><p>Base64是一种编码方式，可以将任意字节组转换为文本，这样就可以通过文本的方式进行传输，例如放在url中。这样生成的文本文件可以放在协议中而不用拍里面出现一些特殊的字符破坏协议的解析。Base64处理的时候将文件转换为二进制进行表示，然后以6位为一组将其映射到64个字符之一。</p>
+<h4 id="base64">Base64</h4>
+<p>Base64是一种编码方式，可以将任意字节组转换为文本，这样就可以通过文本的方式进行传输，例如放在url中。这样生成的文本文件可以放在协议中而不用拍里面出现一些特殊的字符破坏协议的解析。Base64处理的时候将文件转换为二进制进行表示，然后以6位为一组将其映射到64个字符之一。</p>
 <p>Base64在实际应用中有一些变形，因为像url中，会将+，-换成其他的字符进行表示。</p>
-<h4 id="DataURL"><a href="#DataURL" class="headerlink" title="DataURL"></a>DataURL</h4><p>DataURL是url的其中一种类型，可以将二进制数据放进url中，实质上还是利用了Base64进行编码，只不过在其头部加了对数据类型的描述。通过这样的机制，我们可以将一些小的图片直接放在html中，那么浏览器就不用打开一个新的连接进行下载。当然，这个技术还有很多的用途。例如传送一些小图片，因为经过了编码，不易发觉其内容。</p>
+<h4 id="dataurl">DataURL</h4>
+<p>DataURL是url的其中一种类型，可以将二进制数据放进url中，实质上还是利用了Base64进行编码，只不过在其头部加了对数据类型的描述。通过这样的机制，我们可以将一些小的图片直接放在html中，那么浏览器就不用打开一个新的连接进行下载。当然，这个技术还有很多的用途。例如传送一些小图片，因为经过了编码，不易发觉其内容。</p>
 <p>下面是网上找的一小段dataurl，大家可以将它放到url中进行测试。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data:image/gif;base64,R0lGODlhMwAxAIAAAAAAAP///</span><br><span class="line">yH5BAAAAAAALAAAAAAzADEAAAK8jI+pBr0PowytzotTtbm/DTqQ6C3hGX</span><br><span class="line">ElcraA9jIr66ozVpM3nseUvYP1UEHF0FUUHkNJxhLZfEJNvol06tzwrgd</span><br><span class="line">LbXsFZYmSMPnHLB+zNJFbq15+SOf50+6rG7lKOjwV1ibGdhHYRVYVJ9Wn</span><br><span class="line">k2HWtLdIWMSH9lfyODZoZTb4xdnpxQSEF9oyOWIqp6gaI9pI1Qo7BijbF</span><br><span class="line">ZkoaAtEeiiLeKn72xM7vMZofJy8zJys2UxsCT3kO229LH1tXAAAOw==</span><br></pre></td></tr></table></figure>
-<h3 id="浏览器中的文件读取"><a href="#浏览器中的文件读取" class="headerlink" title="浏览器中的文件读取"></a>浏览器中的文件读取</h3><p>由于安全的原因，所有浏览不能直接访问本地的文件系统，必须通过浏览器开放的api访问一个虚拟的文件系统。</p>
+<h3 id="浏览器中的文件读取">浏览器中的文件读取</h3>
+<p>由于安全的原因，所有浏览不能直接访问本地的文件系统，必须通过浏览器开放的api访问一个虚拟的文件系统。</p>
 <p>在HTML5中提供了FileReader接口由于读取本地文件。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"input-file"</span> <span class="attr">onchange</span>=<span class="string">"showInput()"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"pic"</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">src</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">showInput</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> file = <span class="built_in">document</span>.getElementById(<span class="string">"input-file"</span>).files[<span class="number">0</span>];</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> fileReader = <span class="keyword">new</span> FileReader();</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">        fileReader.readAsDataURL(file);</span></span><br><span class="line"><span class="javascript">        fileReader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"pic"</span>);</span></span><br><span class="line"><span class="javascript">            img.setAttribute(<span class="string">'src'</span>, <span class="keyword">this</span>.result);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上面是一下端示范代码，读取本地的一个图片然后显示出来，理解了dataur之后就很好理解这段代码了。<br>FileReader采用异步读取的方式，所以需要注册一个onload函数，表示在读取图片之后进行的操作。<br>FileReader还提供了很多不同的事件可以进行绑定。</p>
-<h3 id="图片的裁剪和上传"><a href="#图片的裁剪和上传" class="headerlink" title="图片的裁剪和上传"></a>图片的裁剪和上传</h3><p>下面就是这篇文章的重点了，现在我们理一下这个思路，我们需要先将图片读取显示出来，用户进行裁剪，然后就裁剪后的结果转为二进制流使用post进行上传。</p>
+<p>上面是一下端示范代码，读取本地的一个图片然后显示出来，理解了dataur之后就很好理解这段代码了。 FileReader采用异步读取的方式，所以需要注册一个onload函数，表示在读取图片之后进行的操作。 FileReader还提供了很多不同的事件可以进行绑定。</p>
+<h3 id="图片的裁剪和上传">图片的裁剪和上传</h3>
+<p>下面就是这篇文章的重点了，现在我们理一下这个思路，我们需要先将图片读取显示出来，用户进行裁剪，然后就裁剪后的结果转为二进制流使用post进行上传。</p>
 <p>图片的读取显示比较简单，利用FileReader很容易实现，问题是怎么获取用户裁剪后的数据，并转换为二进制流。我使用的是一个叫cropper的插件(其他基本大同小异)，其中有一个方法叫做getCroppedCanvas，可以获取到一个Canvas对象。然后调用canvas对象的toDataURL将其转换为DataURL的png文件(可以指定其他的文件格式)，有了这个DataURL后就是想办法将其转换为Blob对象，方法也很简单，就是对base64编码进行解码，然后转换回而进行编码。就可以得到一个图片文件了。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataURLtoBlob</span>(<span class="params">dataurl</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arr = dataurl.split(<span class="string">','</span>), mime = arr[<span class="number">0</span>].match(<span class="regexp">/:(.*?);/</span>)[<span class="number">1</span>],</span><br><span class="line">            bstr = atob(arr[<span class="number">1</span>]), n = bstr.length, u8arr = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(n);</span><br><span class="line">    <span class="keyword">while</span> (n--) &#123;</span><br><span class="line">        u8arr[n] = bstr.charCodeAt(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Blob([u8arr], &#123;<span class="attr">type</span>: mime&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后就是怎么将这个文件发送给服务器了。采用的HTML5提供的FormData对象，利用它可以创建表单，然后将其发送出去。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var formData = new FormData();</span><br><span class="line">formData.append(&apos;file&apos;,file);   //file为Blob对象</span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">$.ajax(&#123;</span><br><span class="line">    url: &quot;/test/&quot;,</span><br><span class="line">    type: &quot;POST&quot;,</span><br><span class="line">    data: formData,</span><br><span class="line">    processData: false,</span><br><span class="line">    contentType: false</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>  请求中需要带将processData和contentType这个两个选项设置为false，这样发送出去的post请求的格式就是<code>multipart/formData</code>类型了。</p>
-<p>  如果使用thinkphp的话可以在post或者$_File对象中找到这个文件对象。</p>
-<h3 id="小坑"><a href="#小坑" class="headerlink" title="小坑"></a>小坑</h3><h4 id="input-type-file-的装饰"><a href="#input-type-file-的装饰" class="headerlink" title="input[type=file]的装饰"></a>input[type=file]的装饰</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> <span class="attr">for</span>=<span class="string">"open-file"</span>&gt;</span>上传图片</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"banner"</span> <span class="attr">accept</span>=<span class="string">"image/*"</span> <span class="attr">id</span>=<span class="string">"open-file"</span> <span class="attr">style</span>=<span class="string">"position:absolute;clip:rect(0,0,0,0)"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>请求中需要带将processData和contentType这个两个选项设置为false，这样发送出去的post请求的格式就是<code>multipart/formData</code>类型了。</p>
+<p>如果使用thinkphp的话可以在post或者$_File对象中找到这个文件对象。</p>
+<h3 id="小坑">小坑</h3>
+<h4 id="inputtypefile的装饰">input[type=file]的装饰</h4>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"btn btn-primary"</span> <span class="attr">for</span>=<span class="string">"open-file"</span>&gt;</span>上传图片</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"banner"</span> <span class="attr">accept</span>=<span class="string">"image/*"</span> <span class="attr">id</span>=<span class="string">"open-file"</span> <span class="attr">style</span>=<span class="string">"position:absolute;clip:rect(0,0,0,0)"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>html中的for标签是将某一个标签和表单的元素进行绑定，这种绑定分为显示绑定和隐式绑定，像上面的例子中,点击label标签就可以出发input的click事件。</p>
-<h4 id="thinkphp中的-File对象"><a href="#thinkphp中的-File对象" class="headerlink" title="thinkphp中的$_File对象"></a>thinkphp中的$_File对象</h4><p>上面的例子中，因为我们的DataURL产生的Blob文件是不带文件名的，而thinkphp判断文件类型，即ext的时候就是根据文件类型进行判断，所以如果不加处理的话，这个Blob文件是不能进行正常的上传的。这或许算是一个小bug吧。解决方法就是强制在介绍到的$_File强制添加一个文件名，让它可以判断出一个正确的文件类型。</p>
+<h4 id="thinkphp中的_file对象">thinkphp中的$_File对象</h4>
+<p>上面的例子中，因为我们的DataURL产生的Blob文件是不带文件名的，而thinkphp判断文件类型，即ext的时候就是根据文件类型进行判断，所以如果不加处理的话，这个Blob文件是不能进行正常的上传的。这或许算是一个小bug吧。解决方法就是强制在介绍到的$_File强制添加一个文件名，让它可以判断出一个正确的文件类型。</p>
 
       
     </div>
@@ -826,7 +835,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Blob，DataURL-Base64"><span class="nav-number">1.</span> <span class="nav-text">Blob，DataURL,Base64</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Blob"><span class="nav-number">1.1.</span> <span class="nav-text">Blob</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Base64"><span class="nav-number">1.2.</span> <span class="nav-text">Base64</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DataURL"><span class="nav-number">1.3.</span> <span class="nav-text">DataURL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器中的文件读取"><span class="nav-number">2.</span> <span class="nav-text">浏览器中的文件读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片的裁剪和上传"><span class="nav-number">3.</span> <span class="nav-text">图片的裁剪和上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小坑"><span class="nav-number">4.</span> <span class="nav-text">小坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#input-type-file-的装饰"><span class="nav-number">4.1.</span> <span class="nav-text">input[type=file]的装饰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#thinkphp中的-File对象"><span class="nav-number">4.2.</span> <span class="nav-text">thinkphp中的$_File对象</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#blobdataurlbase64"><span class="nav-number">1.</span> <span class="nav-text">Blob，DataURL,Base64</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#blob"><span class="nav-number">1.1.</span> <span class="nav-text">Blob</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#base64"><span class="nav-number">1.2.</span> <span class="nav-text">Base64</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dataurl"><span class="nav-number">1.3.</span> <span class="nav-text">DataURL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器中的文件读取"><span class="nav-number">2.</span> <span class="nav-text">浏览器中的文件读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片的裁剪和上传"><span class="nav-number">3.</span> <span class="nav-text">图片的裁剪和上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小坑"><span class="nav-number">4.</span> <span class="nav-text">小坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#inputtypefile的装饰"><span class="nav-number">4.1.</span> <span class="nav-text">input[type=file]的装饰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#thinkphp中的_file对象"><span class="nav-number">4.2.</span> <span class="nav-text">thinkphp中的$_File对象</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1243,6 +1252,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

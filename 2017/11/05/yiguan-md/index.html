@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
+<meta name="description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。 比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块， 就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽">
 <meta name="keywords" content="spark,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Spark的用户行为漏斗分析">
 <meta property="og:url" content="http://dong100136.github.io/2017/11/05/yiguan-md/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
+<meta property="og:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。 比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块， 就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Spark的用户行为漏斗分析">
-<meta name="twitter:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)">
+<meta name="twitter:description" content="之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。 比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。 比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块， 就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽">
 
 
 
@@ -508,10 +508,10 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>之前一段时间参加了一个OLAP比赛，现在来进行一波小总结吧。</p>
-<p>比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。<br>比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块，<br>就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭</p>
-<p>用户行为指用户在网站中的一系列的操作，通过分析用户行为的转换率，可以找出产品中的一些不合理的地方，针对性地<br>进行分析。例如用户A在一购物网站中的行为是: 浏览网页，点击商品，加入购物车，点击支付，完成支付。通过分析这个过程中，<br>那一步流失的用户最多，进而分析每一步流式的原因，对产品进行优化。</p>
-<p>比赛的要求比较简单，给定用户的操作记录数据，从中查询指定时间范围内，指定时间窗口的每一步的用户转化率。<br>其实这波比赛还是比较水的，数据直接储存在hdfs上面，用spark进行读取。</p>
-<p>计算用户的漏斗转化率说白了就是计算每一个用户的最长转化路径，算法上参考了最长递增子序列，遍历一遍每个用户的操作序列即可。<br>对于每一步骤只需找到前前一个符合要求的操作。最后计算出最长的操作序列长度即可。直接上代码:</p>
+<p>比赛方案采用了spark和hdfs的简单方案，其实就是自己不会hive和hbase，这个之后要找时间专门去恶补一下。 比赛花了三天的时间，其中大部分的时间都在配环境，现在反过来看看，其实真的没必要话那么多的时间在这一块， 就是坑在太急躁了，这应该也是我的一个毛病。劈哩叭啦的乱敲键盘一遍，然后各种报错，各种重来，一点都静不下来。╮(￣▽￣)╭</p>
+<p>用户行为指用户在网站中的一系列的操作，通过分析用户行为的转换率，可以找出产品中的一些不合理的地方，针对性地 进行分析。例如用户A在一购物网站中的行为是: 浏览网页，点击商品，加入购物车，点击支付，完成支付。通过分析这个过程中， 那一步流失的用户最多，进而分析每一步流式的原因，对产品进行优化。</p>
+<p>比赛的要求比较简单，给定用户的操作记录数据，从中查询指定时间范围内，指定时间窗口的每一步的用户转化率。 其实这波比赛还是比较水的，数据直接储存在hdfs上面，用spark进行读取。</p>
+<p>计算用户的漏斗转化率说白了就是计算每一个用户的最长转化路径，算法上参考了最长递增子序列，遍历一遍每个用户的操作序列即可。 对于每一步骤只需找到前前一个符合要求的操作。最后计算出最长的操作序列长度即可。直接上代码:</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLongestPath2</span></span>(data: <span class="type">ArrayBuffer</span>[<span class="type">Log</span>]): <span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="comment">//    val g = data.sortBy(_.timestamp)</span></span><br><span class="line">  <span class="keyword">val</span> g = data</span><br><span class="line">  <span class="keyword">val</span> timestamp = <span class="keyword">new</span> <span class="type">Array</span>[<span class="type">Int</span>](<span class="number">16</span>)</span><br><span class="line">  <span class="keyword">val</span> preOp = <span class="keyword">new</span> <span class="type">Array</span>[<span class="type">Int</span>](<span class="number">16</span>)</span><br><span class="line">  <span class="keyword">for</span> (i &lt;- <span class="number">1</span> until searchParams.opArr.length) &#123;</span><br><span class="line">    preOp(searchParams.opArr(i)) = searchParams.opArr(i - <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  g.foreach((x) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (x.opId == searchParams.opArr(<span class="number">0</span>)) &#123;</span><br><span class="line">      timestamp(x.opId) = x.timestamp</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (timestamp(preOp(x.opId)) &gt; <span class="number">0</span> &amp;&amp; x.timestamp - timestamp(preOp(x.opId)) &lt;= searchParams.timeWin) &#123;</span><br><span class="line">      timestamp(x.opId) = timestamp(preOp(x.opId))</span><br><span class="line">      <span class="comment">//完成所有转化</span></span><br><span class="line">      <span class="keyword">if</span> (x.opId == searchParams.opArr(searchParams.opArr.length - <span class="number">1</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> searchParams.opArr.length</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i &lt;- searchParams.opArr.length - <span class="number">1</span> to <span class="number">0</span> by <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (timestamp(searchParams.opArr(i)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在算法的基础上进行了一些小的优化，将时间戳进行截断，另外利用了spark的缓存机制来提高计算的效率。</p>
 <p>这样的做法肯定不是最优的，希望这次开了一个好头，以后再接再厉。</p>
@@ -1196,6 +1196,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

@@ -124,19 +124,19 @@
 
 
 
-<meta name="description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。 下">
+<meta name="description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。 在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件 来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。">
 <meta name="keywords" content="大数据,yarn,hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【读书笔记】MRv2框架分析">
 <meta property="og:url" content="http://dong100136.github.io/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。 下">
+<meta property="og:description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。 在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件 来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://dong100136.github.io/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/img1.png">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【读书笔记】MRv2框架分析">
-<meta name="twitter:description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。 下">
+<meta name="twitter:description" content="传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。 在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件 来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。">
 <meta name="twitter:image" content="http://dong100136.github.io/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/img1.png">
 
 
@@ -509,13 +509,15 @@
       
 
       
-        <script src="/assets/js/APlayer.min.js"> </script><p>传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。<br>在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件<br>来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。</p>
+        <script src="/assets/js/APlayer.min.js"> </script><p>传统的MRv1是由编程模型，资源管理和作业控制，数据处理引擎(MapTask和ReduceTask)三部份组成，相对来说并不是特别灵活。 在Yarn出现之后，则将资源管理模块交给yarn实现，而整个MapReduce框架则运行在Yarn之上，仅需实现ApplicationMaster组件 来完成作业控制功能。MR on Yarn的框架使得集群可以和其他的计算模型共享集群，大大增加了计算的灵活性。</p>
 <p>下面是MR Application的架构图。</p>
-<p><img src="/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/img1.png" alt="img"></p>
+<figure>
+<img src="/2017/04/20/hadoop/【读书笔记】MRv2框架源码解析/img1.png" alt="img"><figcaption>img</figcaption>
+</figure>
 <ul>
 <li>Container Allocator</li>
 </ul>
-<p>对每一个任务的资源需求可以描述为一个五元组(Priority，hostname，capability，containers，relax_locality)，分别代表资源的优先级，<br>期望资源所在的host，资源数量(支持内存和CPU两种)，Container数量和是否松弛本地。</p>
+<p>对每一个任务的资源需求可以描述为一个五元组(Priority，hostname，capability，containers，relax_locality)，分别代表资源的优先级， 期望资源所在的host，资源数量(支持内存和CPU两种)，Container数量和是否松弛本地。</p>
 <p>Container Allocator 周期性和RM进行通信，RM通过心跳的方式应答已经成功分配Container列表</p>
 <ul>
 <li>ClientService</li>
@@ -540,38 +542,42 @@
 <ul>
 <li>Specular</li>
 </ul>
-<p>完成推测式执行功能，当任务的执行速度明显慢于其他任务的速度的时候，会为该任务启动一个备份任务，让他们之间进行竞争，将先完成的任务结果作为<br>最终的结果，然后杀死没有完成的任务</p>
+<p>完成推测式执行功能，当任务的执行速度明显慢于其他任务的速度的时候，会为该任务启动一个备份任务，让他们之间进行竞争，将先完成的任务结果作为 最终的结果，然后杀死没有完成的任务</p>
 <ul>
 <li>Container Launcher</li>
 </ul>
 <p>负责和Node Manager进行通信，启动Container。当接收到RM分配的作业资源后就会将任务执行的相关信息发送给NM，要求其启动Container</p>
 <ul>
-<li><p>TaskAttemptListener<br>负责个任务的心跳信息，如果一段时间没有收到任务的心跳信息，则任务它已经死掉，会将其从系统中移除。</p>
-</li>
-<li><p>Job History Event Handler</p>
-</li>
+<li><p>TaskAttemptListener 负责个任务的心跳信息，如果一段时间没有收到任务的心跳信息，则任务它已经死掉，会将其从系统中移除。</p></li>
+<li><p>Job History Event Handler</p></li>
 </ul>
-<p>负责对作业的各种事件记录日志，比如作业创建，作业开始运行，一个任务开始运行等等，这些日志对作业的恢复非常的有用。当AM出现故障之后，Yarn<br>会重新启动AM，AM会从HDFS上读取上次的运行日志，恢复已经完成运行完成的任务。</p>
-<h3 id="MR客户端"><a href="#MR客户端" class="headerlink" title="MR客户端"></a>MR客户端</h3><p>MR客户端的通信设计两个RPC协议，ApplicationClientProtocal(完成作业的提交，杀死作业，改变作业的优先级)和MRClientProtocal(控制查看作业的运行状态)</p>
-<h3 id="MR的运行模式"><a href="#MR的运行模式" class="headerlink" title="MR的运行模式"></a>MR的运行模式</h3><p>MR有三种不同的运行模式，分别为local，uber和non-uber，对于测试的话，使用local模式，对于小数据作业，使用uber模式，此模式下会将map和reduce过程安排在<br>一个节点上，而对于大作业，采用non-uber模式，该模式下，AM会优先为MapTask申请资源，当MapTask完成数目达到一定比例之后，就会为ReduceTask申请资源。</p>
-<h4 id="Uber运行模式"><a href="#Uber运行模式" class="headerlink" title="Uber运行模式"></a>Uber运行模式</h4><p>YARN针对小作业专门进行了优化，对于小作业来说，AM无需为每一个任务分别申请资源，直接重用同一个Container，并且按照先MapTask，后ReduceTask的顺序执行每一个任务，</p>
-<h4 id="Non-Uber运行状态"><a href="#Non-Uber运行状态" class="headerlink" title="Non-Uber运行状态"></a>Non-Uber运行状态</h4><p>在此模式下，AM将一个作业的Map Task和Reduce Task阶段分为下面的四种状态，</p>
+<p>负责对作业的各种事件记录日志，比如作业创建，作业开始运行，一个任务开始运行等等，这些日志对作业的恢复非常的有用。当AM出现故障之后，Yarn 会重新启动AM，AM会从HDFS上读取上次的运行日志，恢复已经完成运行完成的任务。</p>
+<h3 id="mr客户端">MR客户端</h3>
+<p>MR客户端的通信设计两个RPC协议，ApplicationClientProtocal(完成作业的提交，杀死作业，改变作业的优先级)和MRClientProtocal(控制查看作业的运行状态)</p>
+<h3 id="mr的运行模式">MR的运行模式</h3>
+<p>MR有三种不同的运行模式，分别为local，uber和non-uber，对于测试的话，使用local模式，对于小数据作业，使用uber模式，此模式下会将map和reduce过程安排在 一个节点上，而对于大作业，采用non-uber模式，该模式下，AM会优先为MapTask申请资源，当MapTask完成数目达到一定比例之后，就会为ReduceTask申请资源。</p>
+<h4 id="uber运行模式">Uber运行模式</h4>
+<p>YARN针对小作业专门进行了优化，对于小作业来说，AM无需为每一个任务分别申请资源，直接重用同一个Container，并且按照先MapTask，后ReduceTask的顺序执行每一个任务，</p>
+<h4 id="non-uber运行状态">Non-Uber运行状态</h4>
+<p>在此模式下，AM将一个作业的Map Task和Reduce Task阶段分为下面的四种状态，</p>
 <ul>
 <li>pending: 刚启动，未向RM发送资源请求</li>
 <li>scheduced: 已经向RM发送资源请求，但是尚未分配资源</li>
 <li>assigned: 已经分配到资源，并正在运行</li>
 <li>completed: 已经完成运行</li>
 </ul>
-<p>对于Map Task来说，它的生命周期为: scheduled -&gt; assigned -&gt; completed<br>对于Reduce Task来说，它的生命周期为: pending -&gt; scheduled -&gt; assigned -&gt; completed</p>
+<p>对于Map Task来说，它的生命周期为: scheduled -&gt; assigned -&gt; completed 对于Reduce Task来说，它的生命周期为: pending -&gt; scheduled -&gt; assigned -&gt; completed</p>
 <p>Reduce Task一般都需要依赖于Map Task的输出结果，因此不会过早启动Reduce Task，会将其置于pending状态</p>
 <p>整个框架的运行模式可以使用下面这个图表示:</p>
 <p>!(img)[img2.png]</p>
-<h3 id="MR的作业"><a href="#MR的作业" class="headerlink" title="MR的作业"></a>MR的作业</h3><p>MR中和作业相关的组件有Job，Task，TaskAttempt。真正执行任务的是TaskAttempt，一个Task可以启动过个计算实例TaskAttempt让其进行竞争。<br>除了TaskAttempt用于运行计算，另外两个组件主要用于监控和管理。</p>
+<h3 id="mr的作业">MR的作业</h3>
+<p>MR中和作业相关的组件有Job，Task，TaskAttempt。真正执行任务的是TaskAttempt，一个Task可以启动过个计算实例TaskAttempt让其进行竞争。 除了TaskAttempt用于运行计算，另外两个组件主要用于监控和管理。</p>
 <p>!(img)[img3.png]</p>
-<h3 id="推测执行机制"><a href="#推测执行机制" class="headerlink" title="推测执行机制"></a>推测执行机制</h3><p>由于不同节点的状态和任务执行的情况不一样，一般任务的执行速度也不太一样。如果有些任务的完成时间明显慢于其他的任务，则会拖慢整个作业的速度，此时如果再启动一个备份任务和原来的任务进行竞争，取较早完成的任务的结果作为最终的结果，则可以加速任务的完成时间。但是其中存在一个问题，如果新启动的备份任务比原来的任务慢，则只是对资源的浪费，所以合理地选择需要启动备份任务的慢任务则显得非常重要。</p>
+<h3 id="推测执行机制">推测执行机制</h3>
+<p>由于不同节点的状态和任务执行的情况不一样，一般任务的执行速度也不太一样。如果有些任务的完成时间明显慢于其他的任务，则会拖慢整个作业的速度，此时如果再启动一个备份任务和原来的任务进行竞争，取较早完成的任务的结果作为最终的结果，则可以加速任务的完成时间。但是其中存在一个问题，如果新启动的备份任务比原来的任务慢，则只是对资源的浪费，所以合理地选择需要启动备份任务的慢任务则显得非常重要。</p>
 <p>在MR框架中，会估计原来的任务的剩余时间和新任务的执行时间之差，选出差值最大的的任务为其启动备份任务。</p>
 <p>启动备份任务需要符合的几个条件:</p>
-<ol>
+<ol type="1">
 <li>每个任务最多只能启动一个备份任务实例</li>
 <li>已经完成的进度必须在5%以上，这样才能提供足够的历史数据来进行估计</li>
 </ol>
@@ -867,7 +873,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MR客户端"><span class="nav-number">1.</span> <span class="nav-text">MR客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MR的运行模式"><span class="nav-number">2.</span> <span class="nav-text">MR的运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Uber运行模式"><span class="nav-number">2.1.</span> <span class="nav-text">Uber运行模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-Uber运行状态"><span class="nav-number">2.2.</span> <span class="nav-text">Non-Uber运行状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MR的作业"><span class="nav-number">3.</span> <span class="nav-text">MR的作业</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推测执行机制"><span class="nav-number">4.</span> <span class="nav-text">推测执行机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mr客户端"><span class="nav-number">1.</span> <span class="nav-text">MR客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mr的运行模式"><span class="nav-number">2.</span> <span class="nav-text">MR的运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#uber运行模式"><span class="nav-number">2.1.</span> <span class="nav-text">Uber运行模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#non-uber运行状态"><span class="nav-number">2.2.</span> <span class="nav-text">Non-Uber运行状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mr的作业"><span class="nav-number">3.</span> <span class="nav-text">MR的作业</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推测执行机制"><span class="nav-number">4.</span> <span class="nav-text">推测执行机制</span></a></li></ol></div>
             
 
           </div>
@@ -1284,6 +1290,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

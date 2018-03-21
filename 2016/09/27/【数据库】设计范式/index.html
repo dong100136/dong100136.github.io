@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式:第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall.其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF)定义:">
+<meta name="description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式: 第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall. 其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF) 定">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库设计范式">
 <meta property="og:url" content="http://dong100136.github.io/2016/09/27/【数据库】设计范式/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式:第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall.其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF)定义:">
+<meta property="og:description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式: 第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall. 其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF) 定">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库设计范式">
-<meta name="twitter:description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式:第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall.其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF)定义:">
+<meta name="twitter:description" content="数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多. 目前一般分为六种设计范式: 第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall. 其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推 第一范式(1NF) 定">
 
 
 
@@ -508,12 +508,15 @@
 
       
         <script src="/assets/js/APlayer.min.js"> </script><p>数据库范式是一种数据库设计的指导规范,满足一定的范式要求,可以有效地减少数据库的数据冗余,节省数据库的空间,同时也减少了数据库维护完整性的难度.但是支持的范式越高,对性能的影响越大,因为获取一个数据的步骤越多.</p>
-<p>目前一般分为六种设计范式:<br>第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall.<br>其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推</p>
-<h3 id="第一范式-1NF"><a href="#第一范式-1NF" class="headerlink" title="第一范式(1NF)"></a>第一范式(1NF)</h3><p>定义: 如果关系模式R的每一个关系r的属性都是不可分割的数据项,则称模式R为第一范式的模式<br>简单地说就是每一个属性都是原子项,不可分割</p>
+<p>目前一般分为六种设计范式: 第一范式,第二范式,第三范式,BC范式,第四范式,第五范式nstall. 其中第一范式又被称为1NF,第二范式又被称为2NF,以此类推</p>
+<h3 id="第一范式1nf">第一范式(1NF)</h3>
+<p>定义: 如果关系模式R的每一个关系r的属性都是不可分割的数据项,则称模式R为第一范式的模式 简单地说就是每一个属性都是原子项,不可分割</p>
 <p>第一范式是关系型数据库的最低要求,如果不能满足第一范式,则不能成为关系型数据库,解决原子性的问题</p>
 <p>第一范式其实是相对的,需要根据实际问题实际调整原则,如姓名,地址等等</p>
-<h3 id="第二范式-2NF"><a href="#第二范式-2NF" class="headerlink" title="第二范式(2NF)"></a>第二范式(2NF)</h3><p>定义: 在满足第一范式的基础上,每一个非主属性完全函数依赖于候选键,那么就称R为第二范式<br>简单地说就是所有非主键的属性需要有全部的主键决定,而不是部分<br>第二范式可以一定程度上减少依赖,解决部分依赖的问题</p>
-<h3 id="第三范式-3NF"><a href="#第三范式-3NF" class="headerlink" title="第三范式(3NF)"></a>第三范式(3NF)</h3><p>定义: 在满足第二范式的基础上,关系模式中的所有非主属性对任何候选都不存在传递依赖<br>简单来说就是所有非主属性不能依赖于其他的非主属性<br>第三范式主要解决依赖传递的问题</p>
+<h3 id="第二范式2nf">第二范式(2NF)</h3>
+<p>定义: 在满足第一范式的基础上,每一个非主属性完全函数依赖于候选键,那么就称R为第二范式 简单地说就是所有非主键的属性需要有全部的主键决定,而不是部分 第二范式可以一定程度上减少依赖,解决部分依赖的问题</p>
+<h3 id="第三范式3nf">第三范式(3NF)</h3>
+<p>定义: 在满足第二范式的基础上,关系模式中的所有非主属性对任何候选都不存在传递依赖 简单来说就是所有非主属性不能依赖于其他的非主属性 第三范式主要解决依赖传递的问题</p>
 
       
     </div>
@@ -801,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一范式-1NF"><span class="nav-number">1.</span> <span class="nav-text">第一范式(1NF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二范式-2NF"><span class="nav-number">2.</span> <span class="nav-text">第二范式(2NF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三范式-3NF"><span class="nav-number">3.</span> <span class="nav-text">第三范式(3NF)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一范式1nf"><span class="nav-number">1.</span> <span class="nav-text">第一范式(1NF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二范式2nf"><span class="nav-number">2.</span> <span class="nav-text">第二范式(2NF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三范式3nf"><span class="nav-number">3.</span> <span class="nav-text">第三范式(3NF)</span></a></li></ol></div>
             
 
           </div>
@@ -1218,6 +1221,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

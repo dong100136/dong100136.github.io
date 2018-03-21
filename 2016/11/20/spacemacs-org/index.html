@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。 最近发现了一个小坑，发觉spacemacs的快捷键最近一">
+<meta name="description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。   最近发现了一个小坑，发觉spacemacs的快捷键最">
 <meta name="keywords" content="emacs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spacemacs使用小记">
 <meta property="og:url" content="http://dong100136.github.io/2016/11/20/spacemacs-org/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。 最近发现了一个小坑，发觉spacemacs的快捷键最近一">
+<meta property="og:description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。   最近发现了一个小坑，发觉spacemacs的快捷键最">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spacemacs使用小记">
-<meta name="twitter:description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。 最近发现了一个小坑，发觉spacemacs的快捷键最近一">
+<meta name="twitter:description" content="写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。  最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。   最近发现了一个小坑，发觉spacemacs的快捷键最">
 
 
 
@@ -510,112 +510,120 @@
         <script src="/assets/js/APlayer.min.js"> </script><p>写这篇博文主要是为了记录一些spacemacs的一些快捷键和一些使用方法，用于自己速查。</p>
 <blockquote>
 <p>最近在fedora中安装了一次spacemacs，期间遇到了一些小问题，所以也一下。在安装的时候，提示找不到某些包或者某些地址访问不了的时候，可以在.spacemacs中将一个https的选项改为false，然后将最大等待时间改为30左右就可以了。</p>
+</blockquote>
+<blockquote>
 <p>最近发现了一个小坑，发觉spacemacs的快捷键最近一直在换，有点不习惯</p>
 </blockquote>
-<h3 id="base"><a href="#base" class="headerlink" title="base"></a>base</h3><table>
+<h3 id="base">base</h3>
+<table>
 <thead>
-<tr>
+<tr class="header">
 <th>按键</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>SPC b m</td>
 <td>kill other buffer</td>
 </tr>
-<tr>
+<tr class="even">
 <td>SPC b b</td>
 <td>show buffer list</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SPC b s</td>
 <td>goto scratch</td>
 </tr>
-<tr>
+<tr class="even">
 <td>SPC b d</td>
 <td>kill this buffer</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SPC w d</td>
 <td>kill this window</td>
 </tr>
 </tbody>
 </table>
-<h3 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h3><p>最近发现spacemacs一个超级棒的功能，在C-x C-f中输入url就可以使用tramp这个插件来访问远端的文件，可以像在本机一样进行操作，非常棒<br>url的格式如下<code>/&lt;protocal&gt;:&lt;username&gt;@&lt;serverIP&gt;:&lt;path&gt;</code>protocal一般为ssh </p>
+<h3 id="ssh">ssh</h3>
+<p>最近发现spacemacs一个超级棒的功能，在C-x C-f中输入url就可以使用tramp这个插件来访问远端的文件，可以像在本机一样进行操作，非常棒 url的格式如下<code>/&lt;protocal&gt;:&lt;username&gt;@&lt;serverIP&gt;:&lt;path&gt;</code>protocal一般为ssh</p>
 <p>同时也支持跳转，</p>
-<h3 id="org-todo"><a href="#org-todo" class="headerlink" title="org-todo"></a>org-todo</h3><p>在普通状态下:</p>
+<h3 id="org-todo">org-todo</h3>
+<p>在普通状态下:</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>按键</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>t</td>
 <td>讲项目设置为TODO项目或者在TODO，DONE，NONE之间进行切换</td>
 </tr>
-<tr>
+<tr class="even">
 <td>S-UP/DOWN</td>
 <td>同上</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>, :</td>
 <td>创建标签</td>
 </tr>
-<tr>
+<tr class="even">
 <td>M-right/left/up/down</td>
 <td>调整当前标题的级别</td>
 </tr>
 </tbody>
 </table>
-<h3 id="VCS"><a href="#VCS" class="headerlink" title="VCS"></a>VCS</h3><table>
+<h3 id="vcs">VCS</h3>
+<table>
 <thead>
-<tr>
+<tr class="header">
 <th>按键</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>SPC g i</td>
 <td>git init</td>
 </tr>
-<tr>
+<tr class="even">
 <td>SPC g s</td>
 <td>git status</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>c c</td>
 <td>git commit</td>
 </tr>
-<tr>
+<tr class="even">
 <td>s</td>
 <td>status a file</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>S</td>
 <td>status all files</td>
 </tr>
 </tbody>
 </table>
-<h3 id="vim操作"><a href="#vim操作" class="headerlink" title="vim操作"></a>vim操作</h3><table>
+<h3 id="vim操作">vim操作</h3>
+<table>
 <thead>
-<tr>
+<tr class="header">
 <th>按键</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>S-J</td>
 <td>合并</td>
 </tr>
 </tbody>
 </table>
-<h2 id="下面是一些elisp的一些记录"><a href="#下面是一些elisp的一些记录" class="headerlink" title="下面是一些elisp的一些记录"></a>下面是一些elisp的一些记录</h2><p>在lisp中所有的操作都是函数，函数用括号包起来</p>
+<h2 id="下面是一些elisp的一些记录">下面是一些elisp的一些记录</h2>
+<p>在lisp中所有的操作都是函数，函数用括号包起来</p>
 <p>随着对spacemacs的学习，这篇文章会慢慢更新的</p>
 
       
@@ -904,7 +912,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#base"><span class="nav-number">1.</span> <span class="nav-text">base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh"><span class="nav-number">2.</span> <span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#org-todo"><span class="nav-number">3.</span> <span class="nav-text">org-todo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VCS"><span class="nav-number">4.</span> <span class="nav-text">VCS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim操作"><span class="nav-number">5.</span> <span class="nav-text">vim操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面是一些elisp的一些记录"><span class="nav-number"></span> <span class="nav-text">下面是一些elisp的一些记录</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#base"><span class="nav-number">1.</span> <span class="nav-text">base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh"><span class="nav-number">2.</span> <span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#org-todo"><span class="nav-number">3.</span> <span class="nav-text">org-todo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vcs"><span class="nav-number">4.</span> <span class="nav-text">VCS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim操作"><span class="nav-number">5.</span> <span class="nav-text">vim操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面是一些elisp的一些记录"><span class="nav-number"></span> <span class="nav-text">下面是一些elisp的一些记录</span></a></div>
             
 
           </div>
@@ -1321,6 +1329,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
