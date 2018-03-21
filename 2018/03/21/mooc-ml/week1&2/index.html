@@ -133,10 +133,10 @@
 <meta property="og:description" content="courera上面的机器学习课程，做个笔记，这将会是一个系列的笔记了。慢慢做。前面的课程还是比较简单的，毕竟是面向大众的，前面花了不少的篇幅来讲矩阵的计算。这些就简单略过吧。 机器学习介绍监督学习和非监督学习机器学习最常见的用途是分类和回归。对于离散数据的预测，则是分类问题，对于连续数据的预测，则是回归问题。最经典的几个例子有：房价的预测，癌症的预测，考试成绩的预测等等。 机器学习基本可以分为两">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://dong100136.github.io/2018/03/21/mooc-ml/week1&2/img1.jpg">
-<meta property="og:image" content="http://dong100136.github.io/2018/03/21/mooc-ml/week1&2/img2.png]">
+<meta property="og:image" content="http://dong100136.github.io/2018/03/21/mooc-ml/week1&2/img2.png">
 <meta property="og:image" content="http://dong100136.github.io/2018/03/21/mooc-ml/week1&2/img3.png">
 <meta property="og:image" content="http://dong100136.github.io/2018/03/21/mooc-ml/week1&2/img4.png">
-<meta property="og:updated_time" content="2018-03-21T09:03:01.000Z">
+<meta property="og:updated_time" content="2018-03-21T09:16:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="machine learning 慕课整理 week1&amp;week2">
 <meta name="twitter:description" content="courera上面的机器学习课程，做个笔记，这将会是一个系列的笔记了。慢慢做。前面的课程还是比较简单的，毕竟是面向大众的，前面花了不少的篇幅来讲矩阵的计算。这些就简单略过吧。 机器学习介绍监督学习和非监督学习机器学习最常见的用途是分类和回归。对于离散数据的预测，则是分类问题，对于连续数据的预测，则是回归问题。最经典的几个例子有：房价的预测，癌症的预测，考试成绩的预测等等。 机器学习基本可以分为两">
@@ -530,7 +530,7 @@
 <p>就是用一个超平面将一个空间氛围两部分。通过将添加一个常数项x0，可以转化为$$Y=AX$$的简单形式。</p>
 <h2 id="代价函数及梯度下降算法"><a href="#代价函数及梯度下降算法" class="headerlink" title="代价函数及梯度下降算法"></a>代价函数及梯度下降算法</h2><p>代价函数采用最简单的平均方差和，之所以要除以2m是为了方便求导。这里有一个要注意的地方，$$\theta$$的每一次迭代都要同步迭代，<br>不能一个一个地更新，虽然可能碰巧出答案。</p>
 <p>另外一个点是归一化。如果不对数据进行归一化，所以得路径会曲曲折折，大大减慢了函数的收敛速度。课程中介绍了两种归一化的方法：<br>最大最小归一化和平均值方差归一化。归一化的最终结果不一定都要在一个范围中，大概大概就行了。</p>
-<p><img src="/2018/03/21/mooc-ml/week1&2/img2.png]" alt="img2"></p>
+<p><img src="/2018/03/21/mooc-ml/week1&2/img2.png" alt="img2"></p>
 <p>另外一个点是梯度下降算法只能获得局部最优解，对于非凸函数，不一定能求得最优解。</p>
 <h2 id="学习率"><a href="#学习率" class="headerlink" title="学习率"></a>学习率</h2><p>梯度下降算法在大部分情况下都能够很好地工作，其中需要选择一个较好的学习率。较大的学习率会导致代价函数的震荡。<br>作代价函数和迭代次数的函数图，可能的情况如下：</p>
 <p><img src="/2018/03/21/mooc-ml/week1&2/img3.png" alt="img3"></p>
