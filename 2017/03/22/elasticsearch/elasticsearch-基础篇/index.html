@@ -1,4 +1,940 @@
-<!DOCTYPE html><html class="theme-next pisces" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css"><link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css"><link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css"><link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4"><link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222"><meta name="keywords" content="大数据,elasticsearch,"><meta name="description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的"><meta name="keywords" content="大数据,elasticsearch"><meta property="og:type" content="article"><meta property="og:title" content="elasticsearch-基础篇"><meta property="og:url" content="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/index.html"><meta property="og:site_name" content="Stone"><meta property="og:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg"><meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg"><meta property="og:updated_time" content="2018-01-14T08:10:22.903Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="elasticsearch-基础篇"><meta name="twitter:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的"><meta name="twitter:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Pisces",version:"0.0.4",sidebar:{position:"right",display:"always",offset:52,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},since:"2/3/2017 11:30:00",onlineAPI:"",site:{title:"Stone",subtitle:"",author:"Stone"},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},leancloud:{enable:!1,appID:"",appKey:""},favicon:{visibilitychange:!0,narmal:"/images/favicon.ico",hidden:"/images/failure.ico",show_text:"(/≧▽≦/)咦！又好了！",hide_text:"(●—●)喔哟，崩溃啦！"}}</script><script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script><link rel="canonical" href="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/"><title>elasticsearch-基础篇 | Stone</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-48084758-7","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-categories"><a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i><br> 分类</a></li><li class="menu-item menu-item-tags"><a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-练习场"><a href="https://dong100136.github.io/PracticeCode/" rel="section"><i class="menu-item-icon fa fa-fw fa-mars"></i><br> 练习场</a></li><li class="menu-item menu-item-about"><a href="https://dong100136.github.io/resume/" rel="section"><i class="menu-item-icon fa fa-fw fa-rocket"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li><li class="menu-item search"><form class="search-form"> <input name="keyword" type="text" class="search-input" placeholder="站内搜索"> <button type="submit" class="search-submit"><i class="fa fa-search"></i></button></form></li><li class="menu-item online"><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人在线</li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav><div class="site-brand-wrapper" style="background-image:url(/images/header-sagiri.jpg)"><div class="site-meta"><div class="custom-logo-site-title"><div class="brand"><span class="logo-line-before"><i></i></span><div class="site-title"><div id="animate" class="animate"> <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span></div><div id="guide" class="guide"> <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span></div></div><span class="logo-line-after"><i></i></span></div></div><p class="site-subtitle"></p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-date"><div class="post-month">03月</div><div class="post-day">22</div></div><div class="post-badge"> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术录·大数据/" itemprop="url" rel="index"><span itemprop="name">技术录·大数据</span></a></span></div><div class="post-block"><link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Stone"><meta itemprop="description" content=""><meta itemprop="image" content="/images/stone.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Stone"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">elasticsearch-基础篇</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-22T13:43:06+08:00">2017-03-22</time></span> <span class="post-category"><span class="post-meta-divider">•</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术录·大数据/" itemprop="url" rel="index"><span itemprop="name">技术录·大数据</span></a></span></span> <span class="post-meta-divider">•</span><span class="page-pv"><i class="fa fa-file-o"></i><span class="busuanzi-value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body" itemprop="articleBody"><script src="/assets/js/APlayer.min.js"></script><p>做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。<br>在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。</p><h2 id="elasticsearch介绍"><a href="#elasticsearch介绍" class="headerlink" title="elasticsearch介绍"></a>elasticsearch介绍</h2><p>elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的Lucene搜索引擎。与其说是一个搜索引擎，更贴切的说法应该是一个非关系型数据库，<br>可以使用elasticsearch 储存和处理PB级别的结构化，非结构化数据。</p><p>elaticseasrch 集群有一个很大的特点就是每一个节点的地位都是平等的，都可以独立成为一个系统,是一种无中心的集群模式，这样的组群方式让它的部署，横向扩展非常灵活，只要起来一台es节点，通过自动发现机制，就可以自动加入已有的集群中。<br>因为其底层是基于Lucene的，所以很多的概念都是相似的，在了解elasticsearch之前要先了解一些信息检索系统的基础知识:</p><h2 id="信息检索系统原理"><a href="#信息检索系统原理" class="headerlink" title="信息检索系统原理"></a>信息检索系统原理</h2><p>索引过程包括了创建索引，删除索引等等操作。那这里要先讲解一下倒排索引和正排索引的概念:</p><p>在我们平时看到的文件系统实际上是一种正排索引，通过文档的ID(文件名等等)找到文件的内容(文档中的词)，在这样的索引中，如果要寻找某一个词在那些文档中，则需要一个文档一个文档读入内存，扫描一次，这样的操作的效率是有多低。和正排索引相反，倒排索引是记录文件内容(文档中的词)出现在那些文档中，形式比较像这样:</p><p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg" alt=""></p><p>有了这样的一个倒排表之后，我们就可以进行检索了，假如我要搜索含有word1的文档，但是不能含有word2，这时Lucene会对查询请求进行预处理，分词等等操作，然后等到这些词之间的一个逻辑关系，然后分别去找到含有word1和word2的文档列表，然后用word1的列表减去word2的列表，这样就可以得到查询结果。很容易看去，这种倒排索引的效率是极高。但是这种查询效率的提升也带来了较长的建立索引和一定的储存空间。</p><p>那么倒序索引又是怎么建立的呢？</p><ol><li>当一段文档输入到Lucene中，会经过一系列的Analyzer，进行分词，去掉停用词，词形变换，相近词变换等等操作</li><li>然后将需要建立索引的Field建立索引，并将需要储存的Field进行储存</li><li>将索引写入储存器中</li></ol><p>在实际中，建立索引的使用的Analyzer，也要对查询的词做一样的处理，这样才能命中，当然也可以使用不同的Analyzer。</p><p>下面是一些Lucene中的常见术语:</p><ul><li><code>index</code>: 索引，一个Lucene索引会保存在一个文件夹中</li><li><code>document</code>:文档，索引的基本单位，可以是一篇文章，一条话单等等,当段的数量比价多的时候，会进行段合并操作</li><li><code>segment</code>:段，一个段包含多个文档，存储为一个文件</li><li><code>term</code>:词，索引的最小单位，一般为经过处理的词</li><li><code>token</code>:词的一次出现为一个token，有两部分组成，文档id和响应的偏移量</li></ul><h2 id="elasticsearch基础"><a href="#elasticsearch基础" class="headerlink" title="elasticsearch基础"></a>elasticsearch基础</h2><p>下面正式来看一下ES的结构，ES是一种无中心的结构模式，ES有自己的一套服务发现机制，当一个ES节点启动之后，会自动去寻找已经存在的ES集群，然后加入其中，这给集群的扩展带来的极大的便利。</p><p>在ES中，索引是分布式的，由多个的shard和多个replica组成，每一个shard可以看作一个独立的Lucene系统，即shard是一个完成的Lucene索引结构。如下图，这是一个三个节点的ES集群，共有3个shard，每个replica又有1个副本，共6个shard。</p><p><img src="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg" alt=""></p><p>一般ES会提供两个端口，分别是9200的http端口和9300的rpc端口，9200用于restful请求，9300用于集群中不同节点之间的通讯。一般的程序都是通过9200端口操作es集群。</p><p>在ES集群中，节点可以扮演3中不同的角色，master node，data node和ingest node。ingest node是5.x之后加入的。通过配置node.master,node.data,node.ingest进行配置。master节点中主要储存集群中元信息，如分片位置，索引信息等等，master的作用跟单个jvm中的同步关键字synchronized相同，集群中多节点协调工作必须要保证数据的一致性，但是不同节点分布在不同的jvm中，不可能用jvm的同步机制。所以需要一个“锁”，节点操作集群中的资源时都通过它来解决一致性问题。data节点储存索引数据，ingest节点目前不太清楚，后面专门总结一下这部分，听说可以极大地提升集群性能。</p><p>在elasticsearch上主要有几种操作，分别是index，search，启动，恢复。下面分别看看这两个过程的:</p><h3 id="Indexing"><a href="#Indexing" class="headerlink" title="Indexing"></a>Indexing</h3><p>当一个index请求通过9200发送给ES集群之后，会想先去计算这个索引应该存放的位置，默认是采用hash来进行计算(文档Id mod shard数量)，所以在指定index结构之后，是不能改变shard的数量的，如果改变了，这个映射关系就会出错，但是我们可以采用reindex的方法重新建立索引来改变原来的结构，当然这是一个代价很高的操作。在计算出索引所在位置之后，会通过9300接口转发到对应的节点之上。</p><p>当节点接收到需要建立索引的数据时，会先将其放在内存中，这个内存会在指定时间之后写入文件，默认为1s，或者在内存满了之后，写入文件之后就是生成一个段文件。这个段文件是不会被修改的，这样的过程叫做flush。当一个索引数据写入文件之后，才能被检索到，所以并不是当索引插入之后就能被直接检索得到，这就是ES的近实时搜索的特性。</p><p>删除索引其实也是一个index的过程，删除不是直接删除索引，其实就是在索引上打上delete标签，然后和其他index操作一样，写入段文件中，然后在进行段合并的时候，才会真正进行删除。</p><p>在系统运行一段时间之后，就会产生很多的段文件，这样对搜索效率十分不利，Lucene由一个段合并的机制，会自动将一些小的段文件合并为一个较大的段文件，不断重复这样的过程，使段文件保存在一个合适的水平。段合并是一个高硬盘IO的过程，会对索引过程产生影响。默认会选择合并代价最小的文件进行合并，当文件达到一定大小之后，是不会自动进行合并的,因为合并这样的大文件会严重影响系统的正常响应的。ES提供了一个optimize的机制，进行optimize就是对大的段文件进行合并。在5.x后改为_forcemerge。</p><p>为了保证索引的建立成功和失败恢复，ES在写入索引的同时和写入translog，这个tanslog在索引写入失败的时候可以对索引进行恢复，有点像数据库的事务</p><h3 id="search"><a href="#search" class="headerlink" title="search"></a>search</h3><p>搜索过程比较容易理解，上面提到，每一个shard其实就是一个独立的Lucene系统，在查询的时候就是汇总所有节点的结果，产生最终的结果。如我们要搜索前10个命中的结果，则每一个节点先查出自己的索引中的前十的数据，然后发给负责汇总的节点。汇总节点从来自其他节点的前十个命中的结果中选出最终的前十的命中结果，然后返回给客户端。从上面可以看出，当shard的数量比较多的时候，会减慢查询速度，另一个问题就是深层查询，如果我们要找第10000~10010的命中结果，则每一个节点都要给汇总节点发送前10010的命中结果。</p><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>启动的过程只要是集群的建立过程，当一个节点启动之后，会主动去ping其他的节点，同时也包括自己，而要去ping那些节点，则可以是可以进行配置的。当有多个master存在的时候，会自动进行选举。当zenDiscover配置不当的时候，很容易出现脑裂的情况，即集群存在多个master，节点分为多个集群，这是我们都不想看到的情况。我们可以通过配置成为master最小需要的票数来决定，从而避免脑裂，一般配置为<code>(master节点数/2)+1</code></p><h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><p>恢复就是当节点出现故障的情况。索引的状态有3中，绿色，黄色和红色。绿色表示主分片，副分片都正常，此时可以提供服务，黄色表示主分片或者副分片不可用，此时会进行分片恢复，此时可以提供服务，红色表示分片完全丢失，查询的时候不会得到储存在此分片上的数据。</p><p>当master节点出现故障时，就会重新进行选举，这个很好理解，当得到的票数不够最小票数的时候，集群就会停止对外提供服务。</p><p>当data节点出现故障时，即分片丢失，此时会从副分片中选出一个分片成为主分片，并等待一段时间，看故障节点能否恢复，当超过一段时间之后，还是没有恢复，就会在其他节点上重建副分片，当建立完成之后，则会恢复正常。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里对ES集群大概有一个简单的认识，慢慢来，不急不急。</p><hr><p>参考资料:</p><ul><li><a href="http://elasticsearch.cn/article/32" target="_blank" rel="noopener">内存那些事儿</a></li><li><a href="http://jolestar.com/elasticsearch-architecture/" target="_blank" rel="noopener">Elasticsearch 架构以及源码概览</a></li></ul></div><div class="post-share">分享到：</div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div></div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>赞赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"><p>微信扫一扫，向我赞赏</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"><p>支付宝扫一扫，向我赞赏</p></div></div></div></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/大数据/" rel="tag"># 大数据</a> <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2017/03/06/lucene介绍及打分公式说明/" rel="next" title="lucene介绍及打分公式说明"><i class="fa fa-chevron-left"></i> lucene介绍及打分公式说明</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2017/03/22/elasticsearch/elasticsearch-角色篇/" rel="prev" title="elasticsearch-角色篇">elasticsearch-角色篇<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div></div><script type="text/javascript">!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/stone-big.jpeg" alt="Stone"><p class="site-author-name" itemprop="name">Stone</p><p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br>所以当遇见了，就要去做</p></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up"><i class="fa fa-fw fa-github"></i></a></span><span class="links-of-author-item"><a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up"><i class="fa fa-fw fa-graduation-cap"></i></a></span><span class="links-of-author-item"><a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up"><i class="fa fa-fw fa-gitlab"></i></a></span><span class="links-of-author-item"><a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up"><i class="fa fa-fw fa-weixin"></i></a></span><span class="links-of-author-item"><a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up"><i class="fa fa-fw fa-more"></i></a></span></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">31</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">8</span> <span class="site-state-item-name">分类</span></a></div></nav><div class="cc-license motion-element" itemprop="license"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank"><img src="/images/cc-by-nc-sa.png" alt="Creative Commons"></a></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch介绍"><span class="nav-number">1.</span> <span class="nav-text">elasticsearch介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息检索系统原理"><span class="nav-number">2.</span> <span class="nav-text">信息检索系统原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch基础"><span class="nav-number">3.</span> <span class="nav-text">elasticsearch基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Indexing"><span class="nav-number">3.1.</span> <span class="nav-text">Indexing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">3.2.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">3.3.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恢复"><span class="nav-number">3.4.</span> <span class="nav-text">恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-image"></div><div class="footer-inner"><p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p><p></p><p>© <span itemprop="copyrightYear">2018</span> Stone. 由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动. Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4. <a href="/sitemap.xml" target="_blank">站点地图</a>. xxxx.</p><p>Made with<i class="fa fa-heart throb" style="color:#d43f57"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>.</p><div class="busuanzi-count"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span><span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span></div><script type="text/javascript">!function(){var t=document.createElement("script");t.src="https://tajs.qq.com/stats?sId=64990117";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script><script type="text/javascript">
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="大数据,elasticsearch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
+<meta name="keywords" content="大数据,elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch-基础篇">
+<meta property="og:url" content="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/index.html">
+<meta property="og:site_name" content="Stone">
+<meta property="og:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg">
+<meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg">
+<meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="elasticsearch-基础篇">
+<meta name="twitter:description" content="做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。 elasticsearch介绍elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的">
+<meta name="twitter:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '0.0.4',
+    sidebar: {"position":"right","display":"always","offset":52,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    since: '2/3/2017 11:30:00',
+    onlineAPI: '',
+    site: {
+      title: 'Stone',
+      subtitle: '',
+      author: 'Stone'
+    },
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    leancloud: {
+      enable: false,
+      appID: '',
+      appKey: ''
+    },
+    favicon: {
+      visibilitychange: true,
+      narmal: '/images/favicon.ico',
+      hidden: '/images/failure.ico',
+      show_text: '(/≧▽≦/)咦！又好了！',
+      hide_text: '(●—●)喔哟，崩溃啦！'
+    }
+  };
+</script>
+
+
+
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="canonical" href="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/"/>
+
+
+
+
+
+  <title>elasticsearch-基础篇 | Stone</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-48084758-7', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-练习场">
+          <a href="https://dong100136.github.io/PracticeCode/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-mars"></i> <br />
+            
+            练习场
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://dong100136.github.io/PracticeCode/resume" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rocket"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+      <li class="menu-item search">
+          <form class="search-form">
+            <input name="keyword" type="text" class="search-input" placeholder="站内搜索">
+            <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
+          </form>
+      </li>
+      <li class="menu-item online"><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人在线</li>
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-brand-wrapper" style="background-image: url(/images/header-sagiri.jpg)">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <div class="brand">
+        <span class="logo-line-before"><i></i></span>
+        <div class="site-title">
+          <div id="animate" class="animate">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
+          </div>
+          <div id="guide" class="guide">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
+          </div>
+        </div>
+        <span class="logo-line-after"><i></i></span>
+      </div>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-date">
+			<div class="post-month">03月</div>
+			<div class="post-day">22</div>
+	</div>
+  
+  <div class="post-badge">
+    
+      <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/技术录·大数据/" itemprop="url" rel="index">
+          <span itemprop="name">技术录·大数据</span>
+        </a>
+      </span>
+    
+  </div>
+  
+
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2017/03/22/elasticsearch/elasticsearch-基础篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/stone.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elasticsearch-基础篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-22T13:43:06+08:00">
+                2017-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">•</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术录·大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">技术录·大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">•</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="/assets/js/APlayer.min.js"> </script><p>做了好几天的elasticsearch集群的搭建和调优，现在做一个小总结,这个可能会写好几篇文章，内容比较多，慢慢来吧。<br>在进行调优的时候，最大的感受就是调优必须要有方法论，做事的方法论很重要，否则就是在浪费时间。不说了，这都是泪T^T。</p>
+<h2 id="elasticsearch介绍"><a href="#elasticsearch介绍" class="headerlink" title="elasticsearch介绍"></a>elasticsearch介绍</h2><p>elasticsearch是一种分布式可扩展的近实时搜素引擎，其底层是基于Lucene的，也可以这么理解，每一个节点都是一套独立的Lucene搜索引擎。与其说是一个搜索引擎，更贴切的说法应该是一个非关系型数据库，<br>可以使用elasticsearch 储存和处理PB级别的结构化，非结构化数据。</p>
+<p>elaticseasrch 集群有一个很大的特点就是每一个节点的地位都是平等的，都可以独立成为一个系统,是一种无中心的集群模式，这样的组群方式让它的部署，横向扩展非常灵活，只要起来一台es节点，通过自动发现机制，就可以自动加入已有的集群中。<br>因为其底层是基于Lucene的，所以很多的概念都是相似的，在了解elasticsearch之前要先了解一些信息检索系统的基础知识:</p>
+<h2 id="信息检索系统原理"><a href="#信息检索系统原理" class="headerlink" title="信息检索系统原理"></a>信息检索系统原理</h2><p>索引过程包括了创建索引，删除索引等等操作。那这里要先讲解一下倒排索引和正排索引的概念:</p>
+<p>在我们平时看到的文件系统实际上是一种正排索引，通过文档的ID(文件名等等)找到文件的内容(文档中的词)，在这样的索引中，如果要寻找某一个词在那些文档中，则需要一个文档一个文档读入内存，扫描一次，这样的操作的效率是有多低。和正排索引相反，倒排索引是记录文件内容(文档中的词)出现在那些文档中，形式比较像这样:</p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdq3hrwflsj30l5076t96.jpg" alt=""></p>
+<p>有了这样的一个倒排表之后，我们就可以进行检索了，假如我要搜索含有word1的文档，但是不能含有word2，这时Lucene会对查询请求进行预处理，分词等等操作，然后等到这些词之间的一个逻辑关系，然后分别去找到含有word1和word2的文档列表，然后用word1的列表减去word2的列表，这样就可以得到查询结果。很容易看去，这种倒排索引的效率是极高。但是这种查询效率的提升也带来了较长的建立索引和一定的储存空间。</p>
+<p>那么倒序索引又是怎么建立的呢？</p>
+<ol>
+<li>当一段文档输入到Lucene中，会经过一系列的Analyzer，进行分词，去掉停用词，词形变换，相近词变换等等操作</li>
+<li>然后将需要建立索引的Field建立索引，并将需要储存的Field进行储存</li>
+<li>将索引写入储存器中</li>
+</ol>
+<p>在实际中，建立索引的使用的Analyzer，也要对查询的词做一样的处理，这样才能命中，当然也可以使用不同的Analyzer。</p>
+<p>下面是一些Lucene中的常见术语:</p>
+<ul>
+<li><code>index</code>: 索引，一个Lucene索引会保存在一个文件夹中</li>
+<li><code>document</code>:文档，索引的基本单位，可以是一篇文章，一条话单等等,当段的数量比价多的时候，会进行段合并操作</li>
+<li><code>segment</code>:段，一个段包含多个文档，存储为一个文件</li>
+<li><code>term</code>:词，索引的最小单位，一般为经过处理的词</li>
+<li><code>token</code>:词的一次出现为一个token，有两部分组成，文档id和响应的偏移量</li>
+</ul>
+<h2 id="elasticsearch基础"><a href="#elasticsearch基础" class="headerlink" title="elasticsearch基础"></a>elasticsearch基础</h2><p>下面正式来看一下ES的结构，ES是一种无中心的结构模式，ES有自己的一套服务发现机制，当一个ES节点启动之后，会自动去寻找已经存在的ES集群，然后加入其中，这给集群的扩展带来的极大的便利。</p>
+<p>在ES中，索引是分布式的，由多个的shard和多个replica组成，每一个shard可以看作一个独立的Lucene系统，即shard是一个完成的Lucene索引结构。如下图，这是一个三个节点的ES集群，共有3个shard，每个replica又有1个副本，共6个shard。</p>
+<p><img src="https://ww3.sinaimg.cn/large/006tNbRwgy1fdvm40ym99j30ku069t96.jpg" alt=""></p>
+<p>一般ES会提供两个端口，分别是9200的http端口和9300的rpc端口，9200用于restful请求，9300用于集群中不同节点之间的通讯。一般的程序都是通过9200端口操作es集群。</p>
+<p>在ES集群中，节点可以扮演3中不同的角色，master node，data node和ingest node。ingest node是5.x之后加入的。通过配置node.master,node.data,node.ingest进行配置。master节点中主要储存集群中元信息，如分片位置，索引信息等等，master的作用跟单个jvm中的同步关键字synchronized相同，集群中多节点协调工作必须要保证数据的一致性，但是不同节点分布在不同的jvm中，不可能用jvm的同步机制。所以需要一个“锁”，节点操作集群中的资源时都通过它来解决一致性问题。data节点储存索引数据，ingest节点目前不太清楚，后面专门总结一下这部分，听说可以极大地提升集群性能。</p>
+<p>在elasticsearch上主要有几种操作，分别是index，search，启动，恢复。下面分别看看这两个过程的:</p>
+<h3 id="Indexing"><a href="#Indexing" class="headerlink" title="Indexing"></a>Indexing</h3><p>当一个index请求通过9200发送给ES集群之后，会想先去计算这个索引应该存放的位置，默认是采用hash来进行计算(文档Id mod shard数量)，所以在指定index结构之后，是不能改变shard的数量的，如果改变了，这个映射关系就会出错，但是我们可以采用reindex的方法重新建立索引来改变原来的结构，当然这是一个代价很高的操作。在计算出索引所在位置之后，会通过9300接口转发到对应的节点之上。</p>
+<p>当节点接收到需要建立索引的数据时，会先将其放在内存中，这个内存会在指定时间之后写入文件，默认为1s，或者在内存满了之后，写入文件之后就是生成一个段文件。这个段文件是不会被修改的，这样的过程叫做flush。当一个索引数据写入文件之后，才能被检索到，所以并不是当索引插入之后就能被直接检索得到，这就是ES的近实时搜索的特性。</p>
+<p>删除索引其实也是一个index的过程，删除不是直接删除索引，其实就是在索引上打上delete标签，然后和其他index操作一样，写入段文件中，然后在进行段合并的时候，才会真正进行删除。</p>
+<p>在系统运行一段时间之后，就会产生很多的段文件，这样对搜索效率十分不利，Lucene由一个段合并的机制，会自动将一些小的段文件合并为一个较大的段文件，不断重复这样的过程，使段文件保存在一个合适的水平。段合并是一个高硬盘IO的过程，会对索引过程产生影响。默认会选择合并代价最小的文件进行合并，当文件达到一定大小之后，是不会自动进行合并的,因为合并这样的大文件会严重影响系统的正常响应的。ES提供了一个optimize的机制，进行optimize就是对大的段文件进行合并。在5.x后改为_forcemerge。</p>
+<p>为了保证索引的建立成功和失败恢复，ES在写入索引的同时和写入translog，这个tanslog在索引写入失败的时候可以对索引进行恢复，有点像数据库的事务</p>
+<h3 id="search"><a href="#search" class="headerlink" title="search"></a>search</h3><p>搜索过程比较容易理解，上面提到，每一个shard其实就是一个独立的Lucene系统，在查询的时候就是汇总所有节点的结果，产生最终的结果。如我们要搜索前10个命中的结果，则每一个节点先查出自己的索引中的前十的数据，然后发给负责汇总的节点。汇总节点从来自其他节点的前十个命中的结果中选出最终的前十的命中结果，然后返回给客户端。从上面可以看出，当shard的数量比较多的时候，会减慢查询速度，另一个问题就是深层查询，如果我们要找第10000~10010的命中结果，则每一个节点都要给汇总节点发送前10010的命中结果。</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>启动的过程只要是集群的建立过程，当一个节点启动之后，会主动去ping其他的节点，同时也包括自己，而要去ping那些节点，则可以是可以进行配置的。当有多个master存在的时候，会自动进行选举。当zenDiscover配置不当的时候，很容易出现脑裂的情况，即集群存在多个master，节点分为多个集群，这是我们都不想看到的情况。我们可以通过配置成为master最小需要的票数来决定，从而避免脑裂，一般配置为<code>(master节点数/2)+1</code></p>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><p>恢复就是当节点出现故障的情况。索引的状态有3中，绿色，黄色和红色。绿色表示主分片，副分片都正常，此时可以提供服务，黄色表示主分片或者副分片不可用，此时会进行分片恢复，此时可以提供服务，红色表示分片完全丢失，查询的时候不会得到储存在此分片上的数据。</p>
+<p>当master节点出现故障时，就会重新进行选举，这个很好理解，当得到的票数不够最小票数的时候，集群就会停止对外提供服务。</p>
+<p>当data节点出现故障时，即分片丢失，此时会从副分片中选出一个分片成为主分片，并等待一段时间，看故障节点能否恢复，当超过一段时间之后，还是没有恢复，就会在其他节点上重建副分片，当建立完成之后，则会恢复正常。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里对ES集群大概有一个简单的认识，慢慢来，不急不急。</p>
+<hr>
+<p>参考资料:</p>
+<ul>
+<li><a href="http://elasticsearch.cn/article/32" target="_blank" rel="noopener">内存那些事儿</a></li>
+<li><a href="http://jolestar.com/elasticsearch-architecture/" target="_blank" rel="noopener">Elasticsearch 架构以及源码概览</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div class="post-share">分享到：</div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"/>
+        <p>微信扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"/>
+        <p>支付宝扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/lucene介绍及打分公式说明/" rel="next" title="lucene介绍及打分公式说明">
+                <i class="fa fa-chevron-left"></i> lucene介绍及打分公式说明
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/22/elasticsearch/elasticsearch-角色篇/" rel="prev" title="elasticsearch-角色篇">
+                elasticsearch-角色篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div>
+    </div>
+
+  
+
+
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/stone-big.jpeg"
+                alt="Stone" />
+            
+              <p class="site-author-name" itemprop="name">Stone</p>
+              <p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br/>所以当遇见了，就要去做</p>
+          </div>
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-graduation-cap"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-gitlab"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-weixin"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-more"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+            
+
+          </nav>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.png" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+     <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch介绍"><span class="nav-number">1.</span> <span class="nav-text">elasticsearch介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息检索系统原理"><span class="nav-number">2.</span> <span class="nav-text">信息检索系统原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch基础"><span class="nav-number">3.</span> <span class="nav-text">elasticsearch基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Indexing"><span class="nav-number">3.1.</span> <span class="nav-text">Indexing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">3.2.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">3.3.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恢复"><span class="nav-number">3.4.</span> <span class="nav-text">恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-image"></div>
+      <div class="footer-inner">
+        <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
+<p></p>
+
+<p>© <span itemprop="copyrightYear">2018</span> Stone.
+    由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
+    Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
+    <a href="/sitemap.xml" target="_blank">站点地图</a>.
+    xxxx.
+</p>
+<p>Made with <i class="fa fa-heart throb" style="color: #d43f57;"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>. </p>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://tajs.qq.com/stats?sId=64990117";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+
+    
+
+  </div>
+
+  <script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script>
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -313,4 +1249,22 @@
         onPopupClose();
       }
     });
-  </script></body></html>
+  </script>
+
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

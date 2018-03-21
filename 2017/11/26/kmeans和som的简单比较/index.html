@@ -1,4 +1,903 @@
-<!DOCTYPE html><html class="theme-next pisces" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css"><link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css"><link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css"><link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4"><link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222"><meta name="keywords" content="聚类,机器学习,"><meta name="description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神"><meta name="keywords" content="聚类,机器学习"><meta property="og:type" content="article"><meta property="og:title" content="kmeans和som的简单比较"><meta property="og:url" content="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/index.html"><meta property="og:site_name" content="Stone"><meta property="og:description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238109-f10ede68-d2c0-11e7-99c3-3ea4f6384d5d.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238133-89438dd2-d2c1-11e7-8620-9e0a94e4e347.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238136-ab82db46-d2c1-11e7-9175-22f987259a82.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238141-b090019a-d2c1-11e7-8d18-004ba6e1feb7.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238184-d8c76990-d2c2-11e7-9e0a-831717ed483e.png"><meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238189-0cebfe84-d2c3-11e7-900d-8793513586a9.png"><meta property="og:updated_time" content="2018-01-14T08:10:22.795Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="kmeans和som的简单比较"><meta name="twitter:description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神"><meta name="twitter:image" content="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Pisces",version:"0.0.4",sidebar:{position:"right",display:"always",offset:52,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},since:"2/3/2017 11:30:00",onlineAPI:"",site:{title:"Stone",subtitle:"",author:"Stone"},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},leancloud:{enable:!1,appID:"",appKey:""},favicon:{visibilitychange:!0,narmal:"/images/favicon.ico",hidden:"/images/failure.ico",show_text:"(/≧▽≦/)咦！又好了！",hide_text:"(●—●)喔哟，崩溃啦！"}}</script><script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script><link rel="canonical" href="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/"><title>kmeans和som的简单比较 | Stone</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-48084758-7","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-categories"><a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i><br> 分类</a></li><li class="menu-item menu-item-tags"><a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-练习场"><a href="https://dong100136.github.io/PracticeCode/" rel="section"><i class="menu-item-icon fa fa-fw fa-mars"></i><br> 练习场</a></li><li class="menu-item menu-item-about"><a href="https://dong100136.github.io/resume/" rel="section"><i class="menu-item-icon fa fa-fw fa-rocket"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li><li class="menu-item search"><form class="search-form"> <input name="keyword" type="text" class="search-input" placeholder="站内搜索"> <button type="submit" class="search-submit"><i class="fa fa-search"></i></button></form></li><li class="menu-item online"><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人在线</li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav><div class="site-brand-wrapper" style="background-image:url(/images/header-sagiri.jpg)"><div class="site-meta"><div class="custom-logo-site-title"><div class="brand"><span class="logo-line-before"><i></i></span><div class="site-title"><div id="animate" class="animate"> <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span></div><div id="guide" class="guide"> <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span></div></div><span class="logo-line-after"><i></i></span></div></div><p class="site-subtitle"></p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-date"><div class="post-month">11月</div><div class="post-day">26</div></div><div class="post-badge"> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术录·ml/" itemprop="url" rel="index"><span itemprop="name">技术录·ml</span></a></span></div><div class="post-block"><link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Stone"><meta itemprop="description" content=""><meta itemprop="image" content="/images/stone.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Stone"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">kmeans和som的简单比较</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-26T16:05:53+08:00">2017-11-26</time></span> <span class="post-category"><span class="post-meta-divider">•</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术录·ml/" itemprop="url" rel="index"><span itemprop="name">技术录·ml</span></a></span></span> <span class="post-meta-divider">•</span><span class="page-pv"><i class="fa fa-file-o"></i><span class="busuanzi-value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body" itemprop="articleBody"><script src="/assets/js/APlayer.min.js"></script><p>聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。</p><p>竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。<br>整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神经元起抑制作用。</p><p>此次比较使用了三组数据，分别是经典的 iris 数据集，和随机生成的两个圆。iris 数据集可以近似看做线性可分，两个圆的就是线性不可分的情况。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report</span><br><span class="line">iris = load_iris()</span><br><span class="line">labels = KMeans(n_clusters=<span class="number">3</span>).fit_predict(iris.data)</span><br><span class="line">print(classification_report(iris.target,labels))</span><br><span class="line">plt.scatter(iris_reduce[:,<span class="number">0</span>],iris_reduce[:,<span class="number">1</span>],c=labels)</span><br></pre></td></tr></table></figure><p><img src="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png" alt="image"></p><p>f1得分为0.89</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def som(k,x,y,data):</span><br><span class="line">    # k 为簇数，x,y为神经网络的形状</span><br><span class="line">    som = MiniSom(x,y,data.shape[1],sigma=1,learning_rate=0.5)</span><br><span class="line">    som.random_weights_init(np.array(data))</span><br><span class="line">    som.train_random(np.array(data),2000)</span><br><span class="line">    </span><br><span class="line">    w = som.get_weights()</span><br><span class="line">    weight = pd.DataFrame(w.reshape(x*y,data.shape[1]))</span><br><span class="line">    KM =KMeans(n_clusters=k,n_jobs=-1)</span><br><span class="line">    model = KM.fit(weight)</span><br><span class="line">    weight[&apos;label&apos;] = model.labels_</span><br><span class="line">    rs = np.array(weight[&apos;label&apos;]).reshape((x,y))</span><br><span class="line"></span><br><span class="line">    def get_winner(v):</span><br><span class="line">        l = som.winner(np.array(v))</span><br><span class="line">        return rs[l]</span><br><span class="line">    </span><br><span class="line">    return pd.DataFrame(data).apply(get_winner,axis=1)</span><br><span class="line"></span><br><span class="line">labels2 = som(3,20,20,iris.data)</span><br></pre></td></tr></table></figure><p><img src="https://user-images.githubusercontent.com/10239202/33238109-f10ede68-d2c0-11e7-99c3-3ea4f6384d5d.png" alt="image"></p><p>f1得分为0.95</p><p>可以看出 som 这种方法可以获得比 kmeans 稍好的结果。</p><p>下面看看线性不可分的情况，使用 sklearn 里面的 make_circle来生成数据</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.datasets import make_circles</span><br><span class="line">x, label = make_circles(n_samples=400, factor=.3, noise=.05)</span><br><span class="line">plt.scatter(x[:,0],x[:,1],c=label)</span><br></pre></td></tr></table></figure><p><img src="https://user-images.githubusercontent.com/10239202/33238133-89438dd2-d2c1-11e7-8620-9e0a94e4e347.png" alt="image"></p><p>下面分别是 kmeans 和 som 的结果：</p><p><img src="https://user-images.githubusercontent.com/10239202/33238136-ab82db46-d2c1-11e7-9175-22f987259a82.png" alt="image"></p><p><img src="https://user-images.githubusercontent.com/10239202/33238141-b090019a-d2c1-11e7-8d18-004ba6e1feb7.png" alt="image"></p><p>可以看出两个聚类器都不能识别这类情况，所以我感觉 som 只能对线性可分的情况进行处理，而且总体上和 kmeans 差不多，也没有特别不一样。</p><p>在处理线性不可分的这个情况，又试了一下 DBSCAN 和 KernelPCA。</p><p>DBSCAN 是一种基于密度的聚类方法，可以发现一些不规则的簇。但是它使用的范围其实很有限，如果分类的点的密度不均衡，则会出现问题，另外对于<br>较高维度的数据，同样不是很适合。</p><p>PCA 主成分分析是进行降维的，而 KPCA 则恰恰相反，通过核函数，进行升维，将原来线性不可分的问题转换为线性可分的。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line">model= DBSCAN(eps=<span class="number">.1</span>,min_samples=<span class="number">10</span>)</span><br><span class="line">label_dbscan = model.fit_predict(x)</span><br><span class="line">plt.scatter(x[:,<span class="number">0</span>],x[:,<span class="number">1</span>],c=label_dbscan)</span><br><span class="line">print(classification_report(label,label_dbscan))</span><br></pre></td></tr></table></figure><p><img src="https://user-images.githubusercontent.com/10239202/33238184-d8c76990-d2c2-11e7-9e0a-831717ed483e.png" alt="image"></p><p>DBSCAN比较麻烦，需要设置合适的参数才能发现正确的类</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> KernelPCA</span><br><span class="line">model = KernelPCA(kernel=<span class="string">"rbf"</span>, fit_inverse_transform=<span class="keyword">True</span>, gamma=<span class="number">10</span>)</span><br><span class="line">data_transform = model.fit_transform(x)</span><br><span class="line">label = KMeans(n_clusters=<span class="number">2</span>).fit_predict(data_transform)</span><br><span class="line">plt.scatter(x[:,<span class="number">0</span>],x[:,<span class="number">1</span>],c=label)</span><br></pre></td></tr></table></figure><p>这里利用了 KPCA 进行升维然后使用 KMeans 进行聚类，效果拔群</p><p><img src="https://user-images.githubusercontent.com/10239202/33238189-0cebfe84-d2c3-11e7-900d-8793513586a9.png" alt="image"></p><p>做了一段时间的聚类分析，主要用的参数是凝聚度，离散度和轮廓系数，但是这里有一个要注意的地方，其实很多这些指标都是基于簇是类圆形的，<br>对于像上面的那种线性不可分的情况其实不太适用。</p><p>总的来说，其实对于高维数据的聚类其实是相当的麻烦的，特别是做无监督的聚类，其评价方法不是很有效。</p></div><div class="post-share">分享到：</div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div></div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>赞赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"><p>微信扫一扫，向我赞赏</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"><p>支付宝扫一扫，向我赞赏</p></div></div></div></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/聚类/" rel="tag"># 聚类</a> <a href="/tags/机器学习/" rel="tag"># 机器学习</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2017/11/05/yiguan-md/" rel="next" title="基于Spark的用户行为漏斗分析"><i class="fa fa-chevron-left"></i> 基于Spark的用户行为漏斗分析</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/01/14/碎碎念-2018-1-14/" rel="prev" title="碎碎念-2018-1-14">碎碎念-2018-1-14<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div></div><script type="text/javascript">!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><section class="site-overview-wrap sidebar-panel sidebar-panel-active"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/stone-big.jpeg" alt="Stone"><p class="site-author-name" itemprop="name">Stone</p><p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br>所以当遇见了，就要去做</p></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up"><i class="fa fa-fw fa-github"></i></a></span><span class="links-of-author-item"><a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up"><i class="fa fa-fw fa-graduation-cap"></i></a></span><span class="links-of-author-item"><a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up"><i class="fa fa-fw fa-gitlab"></i></a></span><span class="links-of-author-item"><a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up"><i class="fa fa-fw fa-weixin"></i></a></span><span class="links-of-author-item"><a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up"><i class="fa fa-fw fa-more"></i></a></span></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">31</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">8</span> <span class="site-state-item-name">分类</span></a></div></nav><div class="cc-license motion-element" itemprop="license"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank"><img src="/images/cc-by-nc-sa.png" alt="Creative Commons"></a></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-image"></div><div class="footer-inner"><p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p><p></p><p>© <span itemprop="copyrightYear">2018</span> Stone. 由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动. Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4. <a href="/sitemap.xml" target="_blank">站点地图</a>. xxxx.</p><p>Made with<i class="fa fa-heart throb" style="color:#d43f57"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>.</p><div class="busuanzi-count"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span><span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span></div><script type="text/javascript">!function(){var t=document.createElement("script");t.src="https://tajs.qq.com/stats?sId=64990117";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script><script type="text/javascript">
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="https://cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Sigmar One:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/social-share.js/1.0.9/css/share.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=0.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=0.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=0.0.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="聚类,机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神">
+<meta name="keywords" content="聚类,机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kmeans和som的简单比较">
+<meta property="og:url" content="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/index.html">
+<meta property="og:site_name" content="Stone">
+<meta property="og:description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238109-f10ede68-d2c0-11e7-99c3-3ea4f6384d5d.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238133-89438dd2-d2c1-11e7-8620-9e0a94e4e347.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238136-ab82db46-d2c1-11e7-9175-22f987259a82.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238141-b090019a-d2c1-11e7-8d18-004ba6e1feb7.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238184-d8c76990-d2c2-11e7-9e0a-831717ed483e.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/10239202/33238189-0cebfe84-d2c3-11e7-900d-8793513586a9.png">
+<meta property="og:updated_time" content="2018-01-14T08:10:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kmeans和som的简单比较">
+<meta name="twitter:description" content="聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。 竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '0.0.4',
+    sidebar: {"position":"right","display":"always","offset":52,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    since: '2/3/2017 11:30:00',
+    onlineAPI: '',
+    site: {
+      title: 'Stone',
+      subtitle: '',
+      author: 'Stone'
+    },
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    leancloud: {
+      enable: false,
+      appID: '',
+      appKey: ''
+    },
+    favicon: {
+      visibilitychange: true,
+      narmal: '/images/favicon.ico',
+      hidden: '/images/failure.ico',
+      show_text: '(/≧▽≦/)咦！又好了！',
+      hide_text: '(●—●)喔哟，崩溃啦！'
+    }
+  };
+</script>
+
+
+
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="canonical" href="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/"/>
+
+
+
+
+
+  <title>kmeans和som的简单比较 | Stone</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-48084758-7', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-练习场">
+          <a href="https://dong100136.github.io/PracticeCode/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-mars"></i> <br />
+            
+            练习场
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://dong100136.github.io/PracticeCode/resume" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rocket"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+      <li class="menu-item search">
+          <form class="search-form">
+            <input name="keyword" type="text" class="search-input" placeholder="站内搜索">
+            <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
+          </form>
+      </li>
+      <li class="menu-item online"><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人在线</li>
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-brand-wrapper" style="background-image: url(/images/header-sagiri.jpg)">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <div class="brand">
+        <span class="logo-line-before"><i></i></span>
+        <div class="site-title">
+          <div id="animate" class="animate">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
+          </div>
+          <div id="guide" class="guide">
+            <span>S</span><span>t</span><span>o</span><span>n</span><span>e</span>
+          </div>
+        </div>
+        <span class="logo-line-after"><i></i></span>
+      </div>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-date">
+			<div class="post-month">11月</div>
+			<div class="post-day">26</div>
+	</div>
+  
+  <div class="post-badge">
+    
+      <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/技术录·ml/" itemprop="url" rel="index">
+          <span itemprop="name">技术录·ml</span>
+        </a>
+      </span>
+    
+  </div>
+  
+
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://dong100136.github.io/2017/11/26/kmeans和som的简单比较/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/stone.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kmeans和som的简单比较</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-26T16:05:53+08:00">
+                2017-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">•</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术录·ml/" itemprop="url" rel="index">
+                    <span itemprop="name">技术录·ml</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">•</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="/assets/js/APlayer.min.js"> </script><p>聚类分析是一种常用的分析方法，其中最为常用的 KMeans。最近也看到一个KMeans 的改进方法，是加入 som 竞争神经网络进行训练。</p>
+<p>竞争神经网络是一个仿照人脑神经元的启发而发明的，在这个神经网络中，神经元竞争被激活的机会。当接受到刺激的时候，神经网络中的一部分神经元会兴奋，而其他的则不会。此类神经元会对某类特征特别敏感。<br>整个神经元中，不同的神经元对不同的特征敏感。兴奋的神经元会对周围的神经元起抑制作用。</p>
+<p>此次比较使用了三组数据，分别是经典的 iris 数据集，和随机生成的两个圆。iris 数据集可以近似看做线性可分，两个圆的就是线性不可分的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report</span><br><span class="line">iris = load_iris()</span><br><span class="line">labels = KMeans(n_clusters=<span class="number">3</span>).fit_predict(iris.data)</span><br><span class="line">print(classification_report(iris.target,labels))</span><br><span class="line">plt.scatter(iris_reduce[:,<span class="number">0</span>],iris_reduce[:,<span class="number">1</span>],c=labels)</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238090-86f2bfe0-d2c0-11e7-86de-200ede82fe4b.png" alt="image"></p>
+<p>f1得分为0.89</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def som(k,x,y,data):</span><br><span class="line">    # k 为簇数，x,y为神经网络的形状</span><br><span class="line">    som = MiniSom(x,y,data.shape[1],sigma=1,learning_rate=0.5)</span><br><span class="line">    som.random_weights_init(np.array(data))</span><br><span class="line">    som.train_random(np.array(data),2000)</span><br><span class="line">    </span><br><span class="line">    w = som.get_weights()</span><br><span class="line">    weight = pd.DataFrame(w.reshape(x*y,data.shape[1]))</span><br><span class="line">    KM =KMeans(n_clusters=k,n_jobs=-1)</span><br><span class="line">    model = KM.fit(weight)</span><br><span class="line">    weight[&apos;label&apos;] = model.labels_</span><br><span class="line">    rs = np.array(weight[&apos;label&apos;]).reshape((x,y))</span><br><span class="line"></span><br><span class="line">    def get_winner(v):</span><br><span class="line">        l = som.winner(np.array(v))</span><br><span class="line">        return rs[l]</span><br><span class="line">    </span><br><span class="line">    return pd.DataFrame(data).apply(get_winner,axis=1)</span><br><span class="line"></span><br><span class="line">labels2 = som(3,20,20,iris.data)</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238109-f10ede68-d2c0-11e7-99c3-3ea4f6384d5d.png" alt="image"></p>
+<p>f1得分为0.95</p>
+<p>可以看出 som 这种方法可以获得比 kmeans 稍好的结果。</p>
+<p>下面看看线性不可分的情况，使用 sklearn 里面的 make_circle来生成数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.datasets import make_circles</span><br><span class="line">x, label = make_circles(n_samples=400, factor=.3, noise=.05)</span><br><span class="line">plt.scatter(x[:,0],x[:,1],c=label)</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238133-89438dd2-d2c1-11e7-8620-9e0a94e4e347.png" alt="image"></p>
+<p>下面分别是 kmeans 和 som 的结果：</p>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238136-ab82db46-d2c1-11e7-9175-22f987259a82.png" alt="image"></p>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238141-b090019a-d2c1-11e7-8d18-004ba6e1feb7.png" alt="image"></p>
+<p>可以看出两个聚类器都不能识别这类情况，所以我感觉 som 只能对线性可分的情况进行处理，而且总体上和 kmeans 差不多，也没有特别不一样。</p>
+<p>在处理线性不可分的这个情况，又试了一下 DBSCAN 和 KernelPCA。</p>
+<p>DBSCAN 是一种基于密度的聚类方法，可以发现一些不规则的簇。但是它使用的范围其实很有限，如果分类的点的密度不均衡，则会出现问题，另外对于<br>较高维度的数据，同样不是很适合。</p>
+<p>PCA 主成分分析是进行降维的，而 KPCA 则恰恰相反，通过核函数，进行升维，将原来线性不可分的问题转换为线性可分的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line">model= DBSCAN(eps=<span class="number">.1</span>,min_samples=<span class="number">10</span>)</span><br><span class="line">label_dbscan = model.fit_predict(x)</span><br><span class="line">plt.scatter(x[:,<span class="number">0</span>],x[:,<span class="number">1</span>],c=label_dbscan)</span><br><span class="line">print(classification_report(label,label_dbscan))</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238184-d8c76990-d2c2-11e7-9e0a-831717ed483e.png" alt="image"></p>
+<p>DBSCAN比较麻烦，需要设置合适的参数才能发现正确的类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> KernelPCA</span><br><span class="line">model = KernelPCA(kernel=<span class="string">"rbf"</span>, fit_inverse_transform=<span class="keyword">True</span>, gamma=<span class="number">10</span>)</span><br><span class="line">data_transform = model.fit_transform(x)</span><br><span class="line">label = KMeans(n_clusters=<span class="number">2</span>).fit_predict(data_transform)</span><br><span class="line">plt.scatter(x[:,<span class="number">0</span>],x[:,<span class="number">1</span>],c=label)</span><br></pre></td></tr></table></figure>
+<p>这里利用了 KPCA 进行升维然后使用 KMeans 进行聚类，效果拔群</p>
+<p><img src="https://user-images.githubusercontent.com/10239202/33238189-0cebfe84-d2c3-11e7-900d-8793513586a9.png" alt="image"></p>
+<p>做了一段时间的聚类分析，主要用的参数是凝聚度，离散度和轮廓系数，但是这里有一个要注意的地方，其实很多这些指标都是基于簇是类圆形的，<br>对于像上面的那种线性不可分的情况其实不太适用。</p>
+<p>总的来说，其实对于高维数据的聚类其实是相当的麻烦的，特别是做无监督的聚类，其评价方法不是很有效。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div class="post-share">分享到：</div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Stone 微信扫一扫，向我赞赏"/>
+        <p>微信扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Stone 支付宝扫一扫，向我赞赏"/>
+        <p>支付宝扫一扫，向我赞赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/聚类/" rel="tag"># 聚类</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/05/yiguan-md/" rel="next" title="基于Spark的用户行为漏斗分析">
+                <i class="fa fa-chevron-left"></i> 基于Spark的用户行为漏斗分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/14/碎碎念-2018-1-14/" rel="prev" title="碎碎念-2018-1-14">
+                碎碎念-2018-1-14 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzIwOS85NzY2"></div>
+    </div>
+
+  
+
+
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/stone-big.jpeg"
+                alt="Stone" />
+            
+              <p class="site-author-name" itemprop="name">Stone</p>
+              <p class="site-description motion-element" itemprop="description">遇见喜欢的事很难<br/>所以当遇见了，就要去做</p>
+          </div>
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/dong100136" target="_blank" title="GitHub" data-balloon="GitHub" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/xie-jian-dong-35/activities" target="_blank" title="zhihu" data-balloon="zhihu" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-graduation-cap"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="gitlab" data-balloon="gitlab" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-gitlab"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://gitlab.com/dong100136" target="_blank" title="weixin" data-balloon="weixin" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-weixin"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://dong100136.github.io" target="_blank" title="更多" data-balloon="更多" data-balloon-pos="up">
+                    
+                      <i class="fa fa-fw fa-more"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+            
+
+          </nav>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.png" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-image"></div>
+      <div class="footer-inner">
+        <p>博客已萌萌哒运行<span id="since"></span><span class="my-face">(●'◡'●)ﾉ♥</span></p>
+<p></p>
+
+<p>© <span itemprop="copyrightYear">2018</span> Stone.
+    由 <a href="https://hexo.io/" target="_blank" class="external" rel="nofollow">Hexo</a> 强力驱动.
+    Theme By <a href="https://github.com/DIYgod/hexo-theme-sagiri" target="_blank" class="external" rel="nofollow">Sagiri</a> v0.0.4.
+    <a href="/sitemap.xml" target="_blank">站点地图</a>.
+    xxxx.
+</p>
+<p>Made with <i class="fa fa-heart throb" style="color: #d43f57;"></i> by <span class="author" itemprop="copyrightHolder">Stone</span>. </p>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://tajs.qq.com/stats?sId=64990117";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+
+    
+
+  </div>
+
+  <script type="text/javascript" src="/js/sagiri.min.js?v=0.0.4"></script>
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -313,4 +1212,22 @@
         onPopupClose();
       }
     });
-  </script></body></html>
+  </script>
+
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
