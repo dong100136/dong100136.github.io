@@ -124,18 +124,18 @@
 
 
 
-<meta name="description" content="本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(conver">
+<meta name="description" content="做题过程 本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(c">
 <meta name="keywords" content="python,机器学习,比赛">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IJCAI-18 阿里妈妈搜索广告转化预测赛后总结">
 <meta property="og:url" content="http://dong100136.github.io/2018/06/13/IJCAI-18阿里妈妈搜索广告转化预测赛后总结/index.html">
 <meta property="og:site_name" content="Stone">
-<meta property="og:description" content="本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(conver">
+<meta property="og:description" content="做题过程 本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(c">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-15T03:22:13.201Z">
+<meta property="og:updated_time" content="2018-06-15T03:31:09.843Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IJCAI-18 阿里妈妈搜索广告转化预测赛后总结">
-<meta name="twitter:description" content="本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(conver">
+<meta name="twitter:description" content="做题过程 本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。 先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(c">
 
 
 
@@ -507,7 +507,8 @@
       
 
       
-        <script src="/assets/js/APlayer.min.js"> </script><p>本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。</p>
+        <script src="/assets/js/APlayer.min.js"> </script><h2 id="做题过程">做题过程</h2>
+<p>本赛题是阿里提供了相关的电商广告，要求对用户 pCVR 进行预测，其中初赛要求预测日常的预测转换率，复赛要求预测特殊节日的转换率（双十一等）,初赛数据的数据量太比较正常，复赛的数据量达到了 11G，处理起来还是不太容易。最后初赛 173/5204，复赛 18/500，成绩也比较满意，但是做得比较常规，所以没有特别的亮点。</p>
 <p>先看看问题，题目提供了 pCVR 的计算方式： pCVR=p(conversion=1|query,user,ad,context,shop)</p>
 <p>评估指标为 log_loss</p>
 <p>提供的基本特征，可以分为下面五大类，基础数据，用户基本信息，商品基本信息，商店基本信息，点击上下文信息。通过以上数据，从下面的几个方面进行特征构造：</p>
@@ -524,20 +525,21 @@
 <li><p>FFM：通过模型对输入特征进行组合，在 FM 的基础山增加了 field 的概念，把相同性质的特征归于同一个 field 特征必须转换成“field_id:feat_id:value”格式，field_id 代表特征所属 field 的编号，feat_id 是特征编号，value 是特征的值。数值型的特征比较容易处理，只需分配单独的 field 编号，如用户评论得分、商品的历史 CTR/CVR 等。categorical 特征需要经过 One-Hot 编码成数值型，编码产生的所有特征同属于一个 field，初赛过程中使用了 FFM 模型进行预测，并用其结果和 lgb 模型的结果进行了融合，效果较比单模型有所提高。复赛由于数据量增大，FFM 模型需要先转换数据格式才能进行训练，每次加入新特征的都需要重新转化数据，效率比较低。所以复赛后期没有继续使用。</p></li>
 <li><p>xgboost/ligthGBM：均是集成树模型，可以很好的处理连续特征,其中 lgb 也可以直接处理类别特征，免去人工进行 onehot 编码，训练速度快，方便使用的同时预测结果比较准确。xgboost/ligthGBM 在初赛中表现相当，但是在复赛数据量增大的情况下，lgb 的速度更快。</p></li>
 </ul>
+<h2 id="问题思考">问题思考</h2>
 <p>下面是对于一些问题的思考：</p>
-<h5 id="比赛用什么模型来做">1. 比赛用什么模型来做</h5>
+<h3 id="比赛用什么模型来做">1. 比赛用什么模型来做</h3>
 <p>对于分类问题，不要想太多，直接上 lgb，lgb 速度快，特征要求少，不用做 onehot，是快速构建模型的最佳选择，虽然 xgb 精度比 lgb 高了一点点，但是可以忽略不计。</p>
-<h5 id="样本分布不平衡">2. 样本分布不平衡</h5>
+<h3 id="样本分布不平衡">2. 样本分布不平衡</h3>
 <p>这个问题应该是不需要考虑的，lgb 支持不平衡数据的自动平衡，但是这种平衡的结果反而会导致结果的下降。样本这种不平衡的分布也是一种信息。</p>
-<h5 id="特征选择的方法">3. 特征选择的方法</h5>
+<h3 id="特征选择的方法">3. 特征选择的方法</h3>
 <p>虽然一般来说，特征越多越好，但是实际上应该是特征的质量越高越好，不好的特征只会给最终结果造成不少的干扰。所以进行特征选择是很有必要的。特征选择的几个方法：filter，wraper，embedded，pca</p>
 <p>filter 是利用特征和结果之间的关系对特征进行筛选，例如特征的方差，互信息，卡方检验，相关系数等等 wraper 是就是我们平时用的土方法，对一个模型进行多轮训练，每一轮训练，都会去掉特征重要程度最差的几个 embedded 通过一些模型进行特征的自动选择，如 LR 模型，GBDT 模型等方法。LR 模型中带有正则项，特别是 L1 正则，通过系数，可以对特征进行一定的选择</p>
-<h5 id="模型融合的方法">4. 模型融合的方法</h5>
+<h3 id="模型融合的方法">4. 模型融合的方法</h3>
 <p>模型融合中，主要用了两种方法，average，stacking。在这个题中，加权平均效果是最好的，也十分的简单。stacking 相对来说复杂一点，其特点是可以学习每个模型的优点，在不同范围的数据上选择不同的模型进行加权融合，网上资料比较少，这里放一个经典图：</p>
 <p>这里做法是这样的，将训练数据分为 5 份，用其中四份作为训练数据，预测第五份，将结果作为一个特征，另外是训练数据，直接求预测值的平均值，然后利用这个新的特征，来进行最后的预测。</p>
-<h5 id="训练数据的划分">5. 训练数据的划分</h5>
+<h3 id="训练数据的划分">5. 训练数据的划分</h3>
 <p>数据的划分方式对结果影响还是很大的，这个问题要认真思考。有这样的一个问题，在线下，我用了 90%的数据作为训练数据，剩下的 10%做验证集，那提交线上的时候，要不要重新用 100%的数据来训练模型，其实是没有必要的，只要分布一直，数据足够，其实 90%的数据和 100%的数据训练出来的模型都差不多。</p>
-<hr>
+<h2 id="经验分享">经验分享</h2>
 <p>下面是一些经验吧：</p>
 <ol type="1">
 <li>当看到题目的时候，先不要想太多，以最快速度构建一个可运行版本，建立一个自己的 baseline</li>
@@ -546,7 +548,7 @@
 <li>保留做题过程中的所有模型，特征，参数，有了这三个东西就可以复现比赛的结果，后面就可以有比较多的模型来做模型融合</li>
 <li>用好 pickle，可以提高做题的速度</li>
 </ol>
-<p>最后贴一些这次学到个 python 技巧,这个还是相当的实用的</p>
+<p>最后贴一些这次学到的 python 技巧,这个还是相当的实用的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># pickle的使用，可以用来保存一些中间数据，节省计算的时间</span><br><span class="line">pickle.load(open(path, &apos;rb&apos;))</span><br><span class="line">pickle.dump(obj, open(path, &apos;wb&apos;), protocol=protocol)</span><br><span class="line"># 将一些数据打包保存</span><br><span class="line">data=[model,feature,in]</span><br><span class="line"></span><br><span class="line"># pandas shift函数, 计算一些划窗特征</span><br><span class="line">t = data11.sort_values([&apos;user_id&apos;,&apos;predict_category_property&apos;,&apos;context_timestamp&apos;])</span><br><span class="line">t[&apos;user_id_pre&apos;] = t[&apos;user_id&apos;].shift(1)</span><br><span class="line">t[&apos;predict_category_property_pre&apos;] = t[&apos;predict_category_property&apos;].shift(1)</span><br><span class="line">t[&apos;context_timestamp_pre&apos;] = t[&apos;context_timestamp&apos;].shift(1)</span><br><span class="line">t[&apos;user_id_search_pre_view&apos;] = t[&apos;context_timestamp&apos;]- t[&apos;context_timestamp_pre&apos;]</span><br><span class="line">t.loc[((t[&apos;predict_category_property_pre&apos;]==t[&apos;predict_category_property&apos;])&amp;(t[&apos;user_id&apos;]==t[&apos;user_id_pre&apos;]))==False,&apos;user_id_search_pre_view&apos;] = -1</span><br><span class="line"></span><br><span class="line"># pandas 的pivot_table,agg,sort,groupby,reset_index都是很不错的工具</span><br><span class="line"></span><br><span class="line"># pandas 强大的query函数！！！可用sql语句，也就是说可以用in，这个超级方便的</span><br><span class="line">train = data11.query(&quot;(context_day==7 and context_hour&gt;=0 and context_hour&lt;=11)&quot;)</span><br><span class="line">b = train.groupby(&apos;item_category_list&apos;)[&apos;is_trade&apos;].mean().reset_index()</span><br><span class="line">b.columns = [&apos;item_category_list&apos;,&apos;category_pcvr&apos;]</span><br><span class="line"></span><br><span class="line"># lgb的early_stop机制</span><br><span class="line">lgb_cv = lgb.LGBMClassifier(</span><br><span class="line">            objective=&apos;binary&apos;,</span><br><span class="line">            learning_rate=0.1,</span><br><span class="line">            seed=2018,</span><br><span class="line">            colsample_bytree=0.7,</span><br><span class="line">            subsample=0.7,</span><br><span class="line">        #     reg_alpha=0.001,</span><br><span class="line">            n_jobs=16,</span><br><span class="line">            n_estimators=20000)</span><br><span class="line">lgb_model = lgb_cv.fit(x_train_temp, y_train, eval_set=[(x_cv_temp, y_cv)],</span><br><span class="line">                           early_stopping_rounds=100,verbose=False)</span><br><span class="line">predict = lgb_model.predict_proba(x_cv_temp)[:, 1]</span><br><span class="line">score = log_loss(y_cv,predict)</span><br></pre></td></tr></table></figure>
 <hr>
 <p>https://github.com/plantsgo/ijcai-2018/blob/master/eda_solve.ipynb 上面是第一个名的 ppt，和参考代码。</p>
@@ -837,7 +839,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#比赛用什么模型来做"><span class="nav-number">1.</span> <span class="nav-text">1. 比赛用什么模型来做</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#样本分布不平衡"><span class="nav-number">2.</span> <span class="nav-text">2. 样本分布不平衡</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#特征选择的方法"><span class="nav-number">3.</span> <span class="nav-text">3. 特征选择的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#模型融合的方法"><span class="nav-number">4.</span> <span class="nav-text">4. 模型融合的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#训练数据的划分"><span class="nav-number">5.</span> <span class="nav-text">5. 训练数据的划分</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#做题过程"><span class="nav-number">1.</span> <span class="nav-text">做题过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题思考"><span class="nav-number">2.</span> <span class="nav-text">问题思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#比赛用什么模型来做"><span class="nav-number">2.1.</span> <span class="nav-text">1. 比赛用什么模型来做</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样本分布不平衡"><span class="nav-number">2.2.</span> <span class="nav-text">2. 样本分布不平衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征选择的方法"><span class="nav-number">2.3.</span> <span class="nav-text">3. 特征选择的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型融合的方法"><span class="nav-number">2.4.</span> <span class="nav-text">4. 模型融合的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练数据的划分"><span class="nav-number">2.5.</span> <span class="nav-text">5. 训练数据的划分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经验分享"><span class="nav-number">3.</span> <span class="nav-text">经验分享</span></a></li></ol></div>
             
 
           </div>
