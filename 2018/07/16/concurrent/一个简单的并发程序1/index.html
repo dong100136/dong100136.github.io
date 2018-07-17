@@ -127,7 +127,7 @@
 <meta name="description" content="在并发的情况下，很多在单线程下不是问题的问题都会成为致命问题，而且会出现一些奇奇怪怪的结果，如程序运行不正确，死锁，重复创建等等问题， 这需要我们对并发模型有一定的理解，这是一个系列文章吧，分别从 volatile，synchronize，锁和原子性等等方面来看并发模型，希望通过这个 整理，可以对并发模型有一个更深的理解。 先来看一个简单的并发程序： 1234567891011121314151">
 <meta name="keywords" content="java,并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个简答的并发程序（1）volatile">
+<meta property="og:title" content="一个简单的并发程序（1）volatile">
 <meta property="og:url" content="http://dong100136.github.io/2018/07/16/concurrent/一个简单的并发程序1/index.html">
 <meta property="og:site_name" content="Stone">
 <meta property="og:description" content="在并发的情况下，很多在单线程下不是问题的问题都会成为致命问题，而且会出现一些奇奇怪怪的结果，如程序运行不正确，死锁，重复创建等等问题， 这需要我们对并发模型有一定的理解，这是一个系列文章吧，分别从 volatile，synchronize，锁和原子性等等方面来看并发模型，希望通过这个 整理，可以对并发模型有一个更深的理解。 先来看一个简单的并发程序： 1234567891011121314151">
@@ -135,9 +135,9 @@
 <meta property="og:image" content="http://dong100136.github.io/2018/07/16/concurrent/一个简单的并发程序1/img.png">
 <meta property="og:image" content="http://dong100136.github.io/2018/07/16/concurrent/一个简单的并发程序1/img2.png">
 <meta property="og:image" content="http://dong100136.github.io/2018/07/16/concurrent/一个简单的并发程序1/img3.png">
-<meta property="og:updated_time" content="2018-07-17T09:13:54.500Z">
+<meta property="og:updated_time" content="2018-07-17T10:51:49.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个简答的并发程序（1）volatile">
+<meta name="twitter:title" content="一个简单的并发程序（1）volatile">
 <meta name="twitter:description" content="在并发的情况下，很多在单线程下不是问题的问题都会成为致命问题，而且会出现一些奇奇怪怪的结果，如程序运行不正确，死锁，重复创建等等问题， 这需要我们对并发模型有一定的理解，这是一个系列文章吧，分别从 volatile，synchronize，锁和原子性等等方面来看并发模型，希望通过这个 整理，可以对并发模型有一个更深的理解。 先来看一个简单的并发程序： 1234567891011121314151">
 <meta name="twitter:image" content="http://dong100136.github.io/2018/07/16/concurrent/一个简单的并发程序1/img.png">
 
@@ -200,7 +200,7 @@
 
 
 
-  <title>一个简答的并发程序（1）volatile | Stone</title>
+  <title>一个简单的并发程序（1）volatile | Stone</title>
   
 
 
@@ -434,7 +434,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个简答的并发程序（1）volatile</h1>
+          <h1 class="post-title" itemprop="name headline">一个简单的并发程序（1）volatile</h1>
         
 
         <div class="post-meta">
